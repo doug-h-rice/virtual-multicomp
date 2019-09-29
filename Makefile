@@ -1,7 +1,9 @@
 # Makefile for Virtual Multicomp
 
 # CC must be an C99 compiler
-CC=gcc -std=c99 
+##CC=gcc -std=c99 
+CC=gcc 
+
 
 # full speed or debugging to taste
 OPTIMIZE=-O2

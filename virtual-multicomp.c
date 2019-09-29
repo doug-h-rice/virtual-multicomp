@@ -1,4 +1,6 @@
-/*   Virtual Nascom, a Nascom II emulator.
+/*   Virtual Multicomp.
+ * 
+ *   inspired by http://searle.hostei.com/grant/#MyZ80
 
      Copyright (C) 
 
@@ -19,7 +21,10 @@
      Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
      02111-1307, USA.
 
+   
 
+   Inspired by http://searle.hostei.com/grant/#MyZ80
+    
    A Multicomp consists of:
 
     - a Z80 CPU,
@@ -31,28 +36,34 @@
 
 	- IO 
 	*   0x80, 0x81 68B50 UART
-	* 
-  With the Z80 emulator in place the first thing to get working is the
-  screen memory.  The "correct" way to simulate screen memory is to
-  trap upon writes, but that would be slow.  We do it any just to get
-  started.
+	
+ * Multicomp uses 68B50 UART - emulate just enough.
+ * the control register is addressed on port 80H 
+ * the    data register is addressed on port 81H.
+ *
    
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <getopt.h>
-#include <ctype.h>
-#include "simz80.h"
-#include "cpu_regs.h"
-#include "ihex.h"
 
+
+/********************************************
+* Sec 1.0 Includes and #defines for TCC and or linux
+********************************************/
+
+#ifdef __TINYC__
+#define tcc 1
+#endif
+
+
+#ifdef linux
 // gets rid of annoying "deprecated conversion from string constant blah blah" warning
 #pragma GCC diagnostic ignored "-Wwrite-strings"
 #pragma GCC diagnostic pop
 
 // gets rid of annoying "deprecated conversion from string constant blah blah" warning
 #pragma GCC diagnostic ignored "-Wwrite-strings"
+#include <stdio.h>
+#include <stdlib.h>
 #include <pthread.h>
 #include <fcntl.h>
 
@@ -69,12 +80,56 @@
 #define DELAY  ;
 #define DELAYL usleep( 500000 );
 
-#define TRUE (1==1)
-#define FALSE (1==0)
- 
+
+/* sleep() in tcc is in milliseconds, in linux sleep is seconds */
+#define sleep dhr_sleep
+
+int dhr_sleep( int milliseconds ){
+       usleep( milliseconds*1000 );
+       return 0; 
+}
+#endif
+
+
+
+/*
+*
+* TCC 
+* 
+*/
+#ifdef tcc
+#include <conio.h>
+#include <stdio.h>
+#include <windows.h>
+#include <time.h>
+
+#define RS232_STRLEN_DEVICE 11
+#define DELAY 	;
+
+#define DELAYM delay_ms( 1 );
+#define DELAYL delay_ms( 100 );
+
+// delay_routines
+void delay_ms(clock_t millis);
+
+HANDLE hCom;           //handle for serial port I/O
+
+void delay_ms(clock_t millis)
+{
+   //  This uses a lot of cpu time to run. find out hoe to use system timer.
+   clock_t endtime;
+   endtime = millis + clock();
+   while( endtime > clock() )         ;
+}
+#endif
+
+
+#include "simz80.h"
+#include "cpu_regs.h"
+#include "ihex.h"
+
 #define SLOW_DELAY  25000
 #define FAST_DELAY 900000
-
 
 static int t_sim_delay = FAST_DELAY;
 
@@ -88,7 +143,6 @@ static int uartRx;
 static int uartTx;
 static int uartTxCount;
 
-
 // for z80
 typedef enum { CONT = 0, RESET = 1, DONE = -1 } sim_action_t;
 static sim_action_t action = CONT;
@@ -97,11 +151,27 @@ static sim_action_t action = CONT;
 * Sec 3.0 Protoypes - linux
 ********************************************/
 /* prototypes */
+#ifdef linux
 void initThread ( pthread_t threadP , void * message1 );
+#endif
+int repeat;
+
+
+/********************************************
+* Sec 5.0 Threads 
+********************************************/
+
+#ifdef	__MSVCRT__
+#endif
 
 int repeat;
 
 
+
+// CheckKey - Thread to wait for a keystroke, then clear repeat flag.
+// 
+
+#ifdef comment
 void * CheckKey( void * ignored )
 {
    while ( 1 != 0 ){
@@ -114,7 +184,39 @@ void * CheckKey( void * ignored )
 	 //printf("k: %x %x ", uartStatus, uartRx );
    }
 }
+#endif
 
+
+#ifdef tcc
+void CheckKey( void * ignored )
+{
+   int fd;
+   while ( 1 != 0 ){
+     uartRx = _getch() & 0xff;
+	 uartStatus |= 0x81; // Set RX avail and INT
+//	 uartStatus |= 0x81; // Set RX avail and INT
+	 // this makes it work. not sure why;
+	 //printf("k: %x %x \n", uartStatus, uartRx );
+   }
+}
+#endif
+
+#ifdef linux
+void * CheckKey( void * ignored )
+{
+   while ( 1 != 0 ){
+     uartRx = getchar() & 0xff;
+	 uartStatus |= 0x81; // Set RX avail and INT
+	 // this makes it work. not sure why;
+	 // printf("");
+	 // printf("k: %x %x \n", uartStatus, uartRx );
+   }
+}
+#endif
+
+
+
+#ifdef linux
 void initThread ( pthread_t threadP ,  void *  message1  ) {
     int  iret1;
     static struct termios oldt, newt;
@@ -148,6 +250,8 @@ void initThread ( pthread_t threadP ,  void *  message1  ) {
 //     pthread_join( thread2, NULL);   
 }
 // options.c_lflag |= (ICANON | ECHO | ECHOE);
+#endif
+
 
 int sim_delay(void)
 { 
@@ -158,18 +262,34 @@ int sim_delay(void)
 int main(int argc, char **argv)
 {
     int c;
+	
+	
+#ifdef	__MSVCRT__
+//if windows start some threads.
+//https://msdn.microsoft.com/en-us/library/kdzttdcb.aspx
+/*
+unsigned long	_beginthreadex	(void *, unsigned, unsigned (__stdcall *) (void *), void*, unsigned, unsigned*);
+void	_endthreadex	(unsigned);
+*/
+	printf("	__MSVCRT__");
+    // Launch CheckKey thread to check for terminating keystrok
+    _beginthread( CheckKey, 0, NULL );
+#endif
+
+#ifdef linux
     pthread_t thread1;
     initThread ( thread1, ( void *) NULL ); 
+#endif
 
-    progname = argv[0];
 
+    //progname = argv[0];
     printf("Loading Z80 code...\n");
 //    load_ihex("BASIC.HEX", ram);
 //    load_ihex("ROM.HEX", ram);
     load_ihex("test.ihx", ram);
 
     for( c = 0; c < 0x0D80; c++ ){
-      if ( (c % 32) == 0 ) {
+      if ( (c % 24 ) == 0 ) {
 		  printf("\n :%04X: ",c);
 	  }
       if ( (c % 8) == 0 ) {
@@ -226,7 +346,7 @@ void out(unsigned int port, unsigned char value)
         // put byte in Transmit data register.
         // Transmit data empty bit is set to 0 for a few polls and then set to 1.
 
-        uartTxCount = 6000;
+        uartTxCount = 60;
         uartStatus |= 0x00 ; // don't set intr
         uartStatus &= ~ 2 ;  // clear TxEmpty Flag;
         
@@ -268,7 +388,9 @@ int in(unsigned int port)
       case 0xB1: // data
       // reset status and clear interrupt    
       // fprintf(stdout, "%c",  uartRx );
-      uartStatus &= ~0x81;       
+      uartStatus &= ~0x81;
+
+	  
       return uartRx & 0xff ;         
 
       default:
