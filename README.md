@@ -1,5 +1,6 @@
-# multicomp
-Z80 simulator based on Grant Searle's Z80 MultiComp board. Allows hex file to be tested in an emulator
+# virtual-multicomp
+
+Z80 simulator based on Grant Searle's Z80 MultiComp board. Allows hex file to be tested in an simulator.
  
 Doug Rice 24/09/2019
 
