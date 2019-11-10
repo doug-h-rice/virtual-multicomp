@@ -1,6 +1,13 @@
 /*   Virtual Multicomp.
  * 
- *   inspired by http://searle.hostei.com/grant/#MyZ80
+ *   inspired by http://searle.hostei.com/grant/#MyZ80 
+  Grant Searle has a new Website http://searle.wales/ to replace http://searle.hostei.com/grant/
+
+  http://searle.wales/
+
+  https://searle.x10host.com/z80/SimpleZ80.html
+
+  https://searle.x10host.com/Multicomp/index.html
 
      Copyright (C) 
 
