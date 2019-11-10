@@ -14,14 +14,14 @@ Grant Searle's Multipcomp boards have been popular on the web.
 
 They provide a minimal component board to play with old processors.
 
+Grant Searle has a new Website http://searle.wales/ to replace  http://searle.hostei.com/grant/
 
- http://searle.hostei.com/grant/
- 
- http://searle.hostei.com/grant/#MyZ80
- 
- http://searle.hostei.com/grant/Multicomp/index.html
+ http://searle.wales/
 
- http://searle.hostei.com/grant/z80/SimpleZ80.html
+ https://searle.x10host.com/z80/SimpleZ80.html
+ 
+ https://searle.x10host.com/Multicomp/index.html
+ 
 
 However it would be useful to emulate the Z80 code before programming an EPROM or adding to the FPGA build.
 
