@@ -63,6 +63,8 @@ I would like a software version that would allow checking of ROM images.
 
 At the moment it cannot run the code as the Z80 it does not support interrupts.
 
+3/1/2020 - BASIC.HEX - the GCC compiled version does not run it, but the TCC compiled version does. 
+I uploaded Grant Searle's BASIC.HEX  as basic_gs47b.hex. Please download from Grants's pages
 
 So here is a simple test program to run z80 loaded from test.ihx
 
