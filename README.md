@@ -61,10 +61,7 @@ The hex file contains BASIC and CRT0 and code for the UART
 		
 I would like a software version that would allow checking of ROM images.
 
-At the moment it cannot run the code as the Z80 it does not support interrupts.
-
-3/1/2020 - BASIC.HEX - the GCC compiled version does not run it, but the TCC compiled version does. 
-I uploaded Grant Searle's BASIC.HEX  as basic_gs47b.hex. Please download from Grants's pages
+3/1/2020 - BASIC.HEX - The TCC compiled version works, but the LINUX/GCC compiled version does not get past the "Memory?" prompt - see later.  ( BASIC.HEX waits for 0x0D, but LINUX returns 0x0A when you press ENTER. )
 
 So here is a simple test program to run z80 loaded from test.ihx
 
@@ -143,4 +140,17 @@ published under GNU General Public License (GPL)
 
 This was before getchar() returned int.
 
+3/1/2020 - BASIC.HEX - The TCC compiled version works, but the LINUX/GCC compiled version does not get past the "Memory?" prompt.  
+
+Please download BASIC.HEX from Grants's Website. 
+
+I uploaded BASIC.HEX as basic_gs47b.hex to my github and the code can be modified to load it.  
+
+Initially, it to runs up to the "Memory?" prompt, but no further.
+
+On LINUX, the BASIC.HEX runs up to the Memory? and does not get to the next prompt as it waits for 0x0D.
+
+The Linux version maps CR LF or <cntrl>-L and <cntrl>-M to 0x0A, and it is not possible to type 0x0D. 
+
+If you map  0x0A to 0x0D, it is possible to get past the Memory? question, however there is a bug that delays outputting the last pressed key, until the next key is pressed.
 
