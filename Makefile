@@ -16,6 +16,13 @@ CFLAGS=$(OPTIMIZE) $(WARN)
 all: test.rst  virtual-multicomp 
 	./virtual-multicomp 
 
+#basic:
+#	sdasz80 -l -o nasmini.asm
+#	sdasz80 -l -o basic.asm
+#	sdcc -V -mz80 --code-loc 0x0138 --data-loc 0 --no-std-crt0 basic.rel nasmini.rel 
+#	/usr/bin/sdldz80 -u -nf test.lk
+
+
 test.rst:  test.ihx
 	sdasz80 -l -o putchar_mc.s
 	sdasz80 -l -o crt0_mc.s

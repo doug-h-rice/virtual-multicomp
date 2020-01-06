@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
 ; Version 3.5.0 #9253 (Mar 19 2016) (Linux)
-; This file was generated Tue Sep 24 22:45:31 2019
+; This file was generated Mon Jan  6 07:59:37 2020
 ;--------------------------------------------------------
 	.module test
 	.optsdcc -mz80
@@ -68,7 +68,7 @@ _main::
 	push	de
 	call	_getchar
 	pop	de
-;test.c:40: printf("Hello World - Doug here %04X :%c: \n\r", x, key );
+;test.c:40: printf("Hello World - SDCC compiled this! %04X :%02X:%c: \n\r", x, key, key );
 	ld	a,l
 	rla
 	sbc	a, a
@@ -76,10 +76,11 @@ _main::
 	ld	bc,#___str_1
 	push	de
 	push	hl
+	push	hl
 	push	de
 	push	bc
 	call	_printf
-	ld	hl,#6
+	ld	hl,#8
 	add	hl,sp
 	ld	sp,hl
 	pop	de
@@ -99,7 +100,7 @@ ___str_0:
 	.db 0x0A
 	.db 0x00
 ___str_1:
-	.ascii "Hello World - Doug here %04X :%c: "
+	.ascii "Hello World - SDCC compiled this! %04X :%02X:%c: "
 	.db 0x0A
 	.db 0x0D
 	.db 0x00

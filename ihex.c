@@ -22,6 +22,12 @@ static bool read_hex(FILE *f, int n, int *v)
 {
     *v = 0;
 
+
+    if ( !f ){
+		printf( "error:-file not open\n" );
+		return false;	
+	}
+	
     while (n-- > 0) {
         int dv, ch = fgetc(f);
 
@@ -51,6 +57,11 @@ static bool read_ihex_line(FILE *f, unsigned char *memory, unsigned *start_addr)
     */
 
     int ch, count, addr, type, v, chk;
+
+    if ( !f ){
+		printf( "error:-file not open\n" );
+		return false;	
+	}
 
     do {
         ch = fgetc(f);
@@ -92,9 +103,14 @@ void load_ihex(const char *file, unsigned char *memory)
     FILE *f = fopen(file, "r");
     unsigned start_addr = -1;
 
-    while (!feof(f))
+    if ( f ){
+      while (!feof(f)){
         if (read_ihex_line(f, memory, &start_addr)) {
             printf("Couldn't load %s as ihex\n", file);
             break;
         }
+      }  
+    }  else {
+		printf(" failed to open :%s: \n",file);
+	}  
 }

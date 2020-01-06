@@ -28,8 +28,6 @@
      Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
      02111-1307, USA.
 
-   
-
    Inspired by http://searle.hostei.com/grant/#MyZ80
     
    A Multicomp consists of:
@@ -48,6 +46,8 @@
  * the control register is addressed on port 80H 
  * the    data register is addressed on port 81H.
  *
+
+
    
 */
 
@@ -291,9 +291,25 @@ void	_endthreadex	(unsigned);
 
     //progname = argv[0];
     printf("Loading Z80 code...\n");
-//    load_ihex("BASIC.HEX", ram);
-//    load_ihex("ROM.HEX", ram);
+ 
     load_ihex("test.ihx", ram);
+
+/* uncomment the required file */
+/* http://searle.wales/ 
+ * 
+; NASCOM ROM BASIC Ver 4.7, (C) 1978 Microsoft
+; Scanned from source published in 80-BUS NEWS from Vol 2, Issue 3
+; (May-June 1983) to Vol 3, Issue 3 (May-June 1984)
+; Adapted for the freeware Zilog Macro Assembler 2.10 to produce
+; the original ROM code (checksum A934H). PA
+
+basic.asm & nasmini.asm => BASIC.HEX
+*/
+
+    //load_ihex("BASIC.HEX", ram);
+    
+	//load_ihex("basic_gs47b.hex", ram);
+    //load_ihex("test.ihx", ram);
 
     for( c = 0; c < 0x0D80; c++ ){
       if ( (c % 24 ) == 0 ) {
@@ -397,6 +413,19 @@ int in(unsigned int port)
       // fprintf(stdout, "%c",  uartRx );
       uartStatus &= ~0x81;
 
+	  /* 
+	   * BASIC.HEX is waiting for 0x0D , 
+	   * but on LINUX ENTER rteurns 0x0A
+	   *  
+	   * On LINUX / GCC there is a bug that the character 
+	   * is not displayed until the next char is pressed.
+	   * 
+	   * 
+	   * 
+	   */ 
+	  if (	uartRx == 0x0A){ 
+		uartRx = 0x0D; 
+	  }
 	  
       return uartRx & 0xff ;         
 

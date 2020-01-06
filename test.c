@@ -37,7 +37,7 @@ main(){
     // Latest version changed to int getchar( void ) from char getchar( void )
 	key = getchar();  
 	// The code below has a problem with the stack.	
-    printf("Hello World - Doug here %04X :%c: \n\r", x, key );
+    printf("Hello World - SDCC compiled this! %04X :%02X:%c: \n\r", x, key, key );
     x++;   
   }  
   // post main loop
