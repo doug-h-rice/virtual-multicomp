@@ -292,7 +292,7 @@ void	_endthreadex	(unsigned);
     //progname = argv[0];
     printf("Loading Z80 code...\n");
  
-    load_ihex("test.ihx", ram);
+    //load_ihex("test.ihx", ram);
 
 /* uncomment the required file */
 /* http://searle.wales/ 
@@ -303,14 +303,17 @@ void	_endthreadex	(unsigned);
 ; Adapted for the freeware Zilog Macro Assembler 2.10 to produce
 ; the original ROM code (checksum A934H). PA
 
-basic.asm & nasmini.asm => BASIC.HEX
+ * Modified by Grant Searle for use on his Multi Comp board and FPGA
+ * 
+ * basic.asm & nasmini.asm => BASIC.HEX
+ * 
 */
 
-    //load_ihex("BASIC.HEX", ram);
+    load_ihex("BASIC.HEX", ram);
     
 	//load_ihex("basic_gs47b.hex", ram);
     //load_ihex("test.ihx", ram);
-
+/*
     for( c = 0; c < 0x0D80; c++ ){
       if ( (c % 24 ) == 0 ) {
 		  printf("\n :%04X: ",c);
@@ -321,6 +324,11 @@ basic.asm & nasmini.asm => BASIC.HEX
 
       printf("%02X ",ram[c]);
 	}
+*/
+
+    printf("Running Z80 code...\n");
+
+
 	uartStatus = 0x02;
     ram[0x10000] = ram[0]; // Make GetWord[0xFFFF) work correctly
     simz80(pc, t_sim_delay, sim_delay);
@@ -349,7 +357,7 @@ void out(unsigned int port, unsigned char value)
     case 0xA0: //status
     case 0xB0: //status
     //    putchar(value);
-        fprintf(stdout, "\nO_%x ",  value);        
+        //fprintf(stdout, "\nOut[ 0x%x ] <= 0x%x \n",  port, value);        
         uartControl = value ;
         uartStatus  = 0x02;
         break;
@@ -358,13 +366,28 @@ void out(unsigned int port, unsigned char value)
     case 0x91: // data
     case 0xA1: // data
     case 0xB1: // data
-        // putchar(value);
+        
         // uartStatus &= ~0x82;
         uartTx = value & 0xff;
         
         // put byte into TxReg or print it out
+        
+        /* on LINUX is you use putchar() and printf() there is a bug. 
+		 * When BASIC.HEX is used the character is not emited 
+		 * until the next key is pressed, if the Z80 was polling for a Character
+		 * 
+		 * Bug not present if fprintf(stderr, "%c",  uartTx ); is used.
+		 * Bug not observsed when TCC used on Windows to build this.
+
+		 */
+        // putchar(value);
+        //printf( "%c",  uartTx );
         //fprintf(stdout, "%c",  uartTx );
-        printf( "%c",  uartTx );
+				
+        fprintf(stderr, "%c",  uartTx );
+	    /* works if you open a /dev/tty and use that. */
+
+		/* backspace does not work very well */
 
         // put byte in Transmit data register.
         // Transmit data empty bit is set to 0 for a few polls and then set to 1.
