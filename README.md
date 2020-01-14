@@ -59,6 +59,8 @@ The hex file contains BASIC and CRT0 and code for the UART
 		BASIC.HEX
 		ROM.HEX
 		
+Grant has modified 8kbasic.asm (found on Tommy Thorn's website) so that basic.asm and intmini.asm => BASIC.HEX
+
 I would like a software version that would allow checking of ROM images.
 
 3/1/2020 - BASIC.HEX - The TCC compiled version works, but the LINUX/GCC compiled version does not get past the "Memory?" prompt - see later.  ( BASIC.HEX waits for 0x0D, but LINUX returns 0x0A when you press ENTER. )
@@ -130,8 +132,6 @@ Run emulator using
 or
 
   	virtual-multicomp.exe 
-
-
 
 SDCC verion used during testing:
 pi@raspberrypi:~/Desktop/virtual_multicomp $ sdcc -v
