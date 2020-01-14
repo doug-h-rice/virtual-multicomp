@@ -1,17 +1,11 @@
 ;;
 ;;
+;; FILE: crt0_mc.s
 ;;
-;; Basically with this we say that our program runs in the address 0x0100 (we can modify it to another address, of course). To use it, we have to compile, as follows:
-;; sdasz80 -o crt0_cpc.s
-;; With this, it generates a file crt0_cpc.rel, which we'll use to compile our code in c. As already mentioned, SDCC does not know about Amstrad, so the compiller not know how to paint a character on screen, if you want to use printf for example, you need to tell the compiler how to make a putchar (printf calls it internally). With any text or code editor (with notepad in Windows) generate a file called putchar_cpc.s with the following contents (at the end of the tutorial can be downloaded all in one zip):
-
-
-;; FILE: crt0.s
 ;; Generic crt0.s for a Z80
 ;; From SDCC..
-;; Modified to suit execution on the Amstrad CPC!
-;; by H. Hansen 2003
 ;; Original lines has been marked out!
+;; see: http://www.cpcmania.com/Docs/Programming/Introduction_to_programming_in_SDCC_Compiling_and_testing_a_Hello_World.htm
 
   .module crt0
   .globl  _main
