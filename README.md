@@ -117,7 +117,7 @@ or
   	sdcc.exe -V -mz80 --code-loc 0x0138 --data-loc 0 --no-std-crt0 crt0_mc.rel putchar_mc.rel test.c
   	sdldz80.exe -u -nf test.lk
  
-
+NOTE: --data-loc 0 needs moving but works for now. The CPU resets to 0x0000.
 
 To build virtual-multicomp on linux use make
 
