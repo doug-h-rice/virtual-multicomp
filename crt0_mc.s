@@ -12,7 +12,8 @@
 
   .area _HEADER (ABS)
 ;; Reset vector
-  .org  0x100 ;; Start from address &100
+;; CPU starts from  0 
+  .org  0x0 ;; Start from address &0
   jp  init
   
   .org  0x110
