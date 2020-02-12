@@ -112,5 +112,7 @@ void load_ihex(const char *file, unsigned char *memory)
       }  
     }  else {
 		printf(" failed to open :%s: \n",file);
-	}  
+	}
+	printf(" Loaded file:%s: \n",file);
+  
 }
