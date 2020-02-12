@@ -47,7 +47,44 @@
  * the    data register is addressed on port 81H.
  *
 
-
+; links:	
+;	TCC		
+;		Tiny C used to rebuild rcasm to allow for address inc feature of SC/MP
+; 		http://bellard.org/tcc/
+;
+;	RCASM
+;		I found an assembler that I could get to understand SC/MP machine code.
+;		http://www.elf-emulation.com/rcasm.html
+;
+;	SCM
+;	    this super monitor came with the RC2014 and works on multicomp.				
+;		https://smallcomputercentral.wordpress.com/small-computer-monitor/small-computer-monitor-v1-0/
+;
+;	Virtual Multi comp
+;		https://github.com/doug-h-rice/virtual-multicomp
+;
+;Small Computer Monitor - RC2014
+;*
+;*help
+;Small Computer Monitor by Stephen C Cousins (www.scc.me.uk)
+;Version 1.0.0 configuration R1 for Z80 based RC2014 systems
+;
+;Monitor commands:
+;A [<address>]  = Assemble        |  D [<address>]   = Disassemble
+;M [<address>]  = Memory display  |  E [<address>]   = Edit memory
+;R [<name>]     = Registers/edit  |  F [<name>]      = Flags/edit
+;B [<address>]  = Breakpoint      |  S [<address>]   = Single step
+;I <port>       = Input from port |  O <port> <data> = Output to port
+;G [<address>]  = Go to program
+;BAUD <device> <rate>             |  CONSOLE <device>
+;FILL <start> <end> <byte>        |  API <function> [<A>] [<DE>]
+;DEVICES, DIR, HELP, RESET
+;*
+;
+;Small Computer Monitor - RC2014
+;*g8400
+;!>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklm
+	
    
 */
 
@@ -310,10 +347,46 @@ void	_endthreadex	(unsigned);
 */
 
     load_ihex("BASIC.HEX", ram);
-    
-	//load_ihex("basic_gs47b.hex", ram);
-    //load_ihex("test.ihx", ram);
+//	load_ihex("basic_gs47b.hex", ram);
+
+	// try SDCC generated hex file
+    load_ihex("test.ihx", ram);
+
 /*
+;Small Computer Monitor by Stephen C Cousins (www.scc.me.uk)
+;Version 1.0.0 configuration R1 for Z80 based RC2014 systems
+*/
+
+    load_ihex("SCMonitor-v100-R1-RC2014-08k-ROM.hex", ram);
+	/*    ./virtual-multicomp test_RC2014_8400.hex */
+    load_ihex("test_RC2014_8400.hex", ram);
+       
+   
+/*
+ * 
+*/    
+	/* load some extra intel hex files */
+	
+    printf( "\n\rCommand Line parameters:- argc: %d argv[1]: %s\n",argc,argv[1]);
+
+	if (argc > 1){
+      load_ihex(argv[1], ram);
+    }
+
+	if (argc > 2){
+      load_ihex(argv[2], ram);
+    }
+
+	if (argc > 3){
+      load_ihex(argv[3], ram);
+    }
+
+    printf( "Loaded z80 hex files -resetting Z80\n\r");
+
+    
+/*
+ * dump loaded hex
+ * 
     for( c = 0; c < 0x0D80; c++ ){
       if ( (c % 24 ) == 0 ) {
 		  printf("\n :%04X: ",c);
