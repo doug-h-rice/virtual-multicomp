@@ -154,3 +154,43 @@ The Linux version maps CR LF or <cntrl>-L and <cntrl>-M to 0x0A, and it is not p
 
 If you map  0x0A to 0x0D, it is possible to get past the Memory? question, however there is a bug that delays outputting the last pressed key, until the next key is pressed.
 
+links:
+	
+	TCC		
+		Tiny C used to rebuild rcasm to allow for address inc feature of SC/MP
+		http://bellard.org/tcc/
+
+	RCASM
+	I found an assembler that I could get to understand SC/MP machine code.
+	http://www.elf-emulation.com/rcasm.html
+
+	SCM
+	    this super monitor came with the RC2014 and works on multicomp.				
+		https://smallcomputercentral.wordpress.com/small-computer-monitor/small-computer-monitor-v1-0/
+
+	Virtual Multi comp
+		https://github.com/doug-h-rice/virtual-multicomp
+	
+	
+Small Computer Monitor - RC2014
+	
+	;*help
+	;Small Computer Monitor by Stephen C Cousins (www.scc.me.uk)
+	;Version 1.0.0 configuration R1 for Z80 based RC2014 systems
+	;
+	;Monitor commands:
+	;A [<address>]  = Assemble        |  D [<address>]   = Disassemble
+	;M [<address>]  = Memory display  |  E [<address>]   = Edit memory
+	;R [<name>]     = Registers/edit  |  F [<name>]      = Flags/edit
+	;B [<address>]  = Breakpoint      |  S [<address>]   = Single step
+	;I <port>       = Input from port |  O <port> <data> = Output to port
+	;G [<address>]  = Go to program
+	;BAUD <device> <rate>             |  CONSOLE <device>
+	;FILL <start> <end> <byte>        |  API <function> [<A>] [<DE>]
+	;DEVICES, DIR, HELP, RESET
+	;*
+	;
+	;Small Computer Monitor - RC2014
+	;*g8400
+	;!>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklm
+
