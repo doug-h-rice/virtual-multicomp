@@ -154,6 +154,24 @@ The Linux version maps CR LF or <cntrl>-L and <cntrl>-M to 0x0A, and it is not p
 
 If you map  0x0A to 0x0D, it is possible to get past the Memory? question, however there is a bug that delays outputting the last pressed key, until the next key is pressed.
 
+12/02/2020
+
+I brought one of Spencer Owen's RC2014 Z80 kits. 
+
+The ROM labelled R0000009 has the Nascom Basic and Small Computer Monitor which also runs in this program.
+Select the 8K page using the links on the ROM card.
+
+It is possible to load the SCM instead of the BASIC. SCM is really good for a Z80 assembler dabble. 
+It is possible to load hex files at say 0x8400 and use the monitor to run the code.
+
+On LINUX using Putty you can pipe the hex file up onto the RC2014. Using putty run the code.
+
+On the Virtual Multicomp, load hex files specified on the command line, to overwrite / add to the default files.
+
+	./virtual-multicomp BASIC.HEX
+	./virtual-multicomp test.ihx
+	./virtual-multicomp SCMonitor-v100-R1-RC2014-08k-ROM.hex test_RC2014_8400.hex
+	
 links:
 	
 	TCC		
