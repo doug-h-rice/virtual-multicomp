@@ -1,5 +1,5 @@
 ====================
-readme.txt
+readme.txt see README.md
 ====================
 Doug Rice 24/09/2019
 
@@ -7,13 +7,16 @@ Tested on LINUX Raspberry Pi Strech PC version
 
 Grant Searle's Multipcomp boards have been popular on the web.
 
+now at: http://searle.wales/
+
+old locations
 http://searle.hostei.com/grant/
 http://searle.hostei.com/grant/#MyZ80
 http://searle.hostei.com/grant/Multicomp/index.html
 
 http://searle.hostei.com/grant/z80/SimpleZ80.html
 
-However it would be useful to emulate Z80 code before programming an EPROM
+However it would be useful to emulate Z80 code before programming an EPROM 
 
 They provide a minimal component board to play with old processors.
 
