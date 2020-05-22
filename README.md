@@ -216,9 +216,9 @@ Small Computer Monitor - RC2014
 
 6809
 
-A version for 6809 included. See comments in file.
+A version for 6809 is included. See comments in file below.
 These three files builds a virtualMulticomp for 6809. Download the ROMS from the suggested sites.
 
-  virtual.c   
-  6809v.c
-  6809.h
+    virtual.c     
+    6809v.c
+    6809.h
