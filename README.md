@@ -146,6 +146,8 @@ Please download BASIC.HEX from Grants's Website.
 
 I uploaded BASIC.HEX as basic_gs47b.hex to my github and the code can be modified to load it.  
 
+It is possible to paste BASIC code into command window to upload it.
+
 Initially, it to runs up to the "Memory?" prompt, but no further.
 
 On LINUX, the BASIC.HEX runs up to the Memory? and does not get to the next prompt as it waits for 0x0D.
@@ -212,3 +214,9 @@ Small Computer Monitor - RC2014
 	;*g8400
 	;!>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklm
 
+6809
+
+A version for 6809 included. See comments in file.
+	virtual.c 
+	6809v.c
+	6809.h
