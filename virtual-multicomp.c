@@ -84,7 +84,26 @@
 ;Small Computer Monitor - RC2014
 ;*g8400
 ;!>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklm
-	
+;
+
+/***********************************************************
+* If you have started BASIC, paste this example basic code
+* 
+* 
+* 
+* LIST
+* 
+10 X=0
+20 PRINT "hELLO"
+30 PRINT "HEOOL"
+40 PRINT "Hello world"
+50 X=X+1
+60 IF X < 100 THEN GOTO 20
+ 
+RUN 
+
+OK
+* 	
    
 */
 
@@ -235,7 +254,15 @@ void * CheckKey( void * ignored )
 void CheckKey( void * ignored )
 {
    int fd;
+   
+	
    while ( 1 != 0 ){
+   
+	 /* test if UART has been read by Microprocessor */
+	 while ( uartStatus & 1 > 0) {
+		 
+		sleep(100);
+	 }	 
      uartRx = _getch() & 0xff;
 	 uartStatus |= 0x81; // Set RX avail and INT
 //	 uartStatus |= 0x81; // Set RX avail and INT
@@ -249,6 +276,14 @@ void CheckKey( void * ignored )
 void * CheckKey( void * ignored )
 {
    while ( 1 != 0 ){
+   
+	 /* test if UART has been read by Microprocessor */
+	 while ( uartStatus & 1 > 0) {
+		usleep(1000);
+	 }	 
+	
+
+	 
      uartRx = getchar() & 0xff;
 	 uartStatus |= 0x81; // Set RX avail and INT
 	 // this makes it work. not sure why;
