@@ -1,12 +1,13 @@
 # virtual-multicomp
 
-This is A Z80 simulator based on Grant Searle's Z80 MultiComp board. 
+This is A Z80 simulator based on Grant Searle's Z80 MultiComp board. It includes a version for 6809 as well.
 
-This allows a hex file to be tested in an simulator, before building into the FPGA or EPROM
+This allows a hex file to be tested in a simulator, before building into the FPGA or EPROM
 
 Doug Rice 
 24/09/2019, 
 29/09/2019
+25/05/2020
 
 Tested on LINUX Raspberry Pi Strech PC version and Windows with TinyC from https://bellard.org/tcc/
 
@@ -35,12 +36,16 @@ The Z80 board has a:
 	ROM - programmed with code to boot z80 and demo board. e.g. Basic
 	UART - serial interface
 
-There is a VHDL version which loads a hex file containing Z80 code.
+There is a VHDL version which loads a hex file containing Z80 code. 
+
+I have found out how to upload new ROM contents without a full FPGA build using QuartusSTP.
 
 Also ported to other FPGA boards.
 
   	https://github.com/douggilliland/MultiComp/tree/master/MultiComp_On_Cyclone%20IV%20VGA%20Card
 
+
+## BASIC
 
 The hex file contains BASIC and CRT0 and code for the UART
 
@@ -62,8 +67,6 @@ The hex file contains BASIC and CRT0 and code for the UART
 Grant has modified 8kbasic.asm (found on Tommy Thorn's website) so that basic.asm and intmini.asm => BASIC.HEX
 
 I would like a software version that would allow checking of ROM images.
-
-3/1/2020 - BASIC.HEX - The TCC compiled version works, but the LINUX/GCC compiled version does not get past the "Memory?" prompt - see later.  ( BASIC.HEX waits for 0x0D, but LINUX returns 0x0A when you press ENTER. )
 
 So here is a simple test program to run z80 loaded from test.ihx
 
@@ -140,23 +143,23 @@ published under GNU General Public License (GPL)
 
 This was before getchar() returned int.
 
-3/1/2020 - BASIC.HEX - The TCC compiled version works, but the LINUX/GCC compiled version does not get past the "Memory?" prompt.  
+3/1/2020 - BASIC.HEX - The TCC compiled version works, but the LINUX/GCC compiled version did not get past the "Memory?" prompt.  
 
 Please download BASIC.HEX from Grants's Website. 
 
 I uploaded BASIC.HEX as basic_gs47b.hex to my github and the code can be modified to load it.  
 
-It is possible to paste BASIC code into command window to upload it.
-
-Initially, it to runs up to the "Memory?" prompt, but no further.
-
-On LINUX, the BASIC.HEX runs up to the Memory? and does not get to the next prompt as it waits for 0x0D.
+On LINUX, my first tries gots the BASIC.HEX to run up to the Memory? It did not get to the next prompt as it waits for 0x0D.
 
 The Linux version maps CR LF or <cntrl>-L and <cntrl>-M to 0x0A, and it is not possible to type 0x0D. 
 
-If you map  0x0A to 0x0D, it is possible to get past the Memory? question, however there is a bug that delays outputting the last pressed key, until the next key is pressed.
+If you map  0x0A to 0x0D, it is possible to get past the Memory? question.
 
-12/02/2020
+A bug that delays outputting the last pressed key, until the next key is pressed was sorted by using stderr instead of stdout.
+
+23/05/2020 - You can paste BASIC code to upload it. CheckKey() now waits for UART Rx to empty before calling GetChar(). 
+
+## RC2014 also uses SBC and BASIC 
 
 I brought one of Spencer Owen's RC2014 Z80 kits. 
 
@@ -174,7 +177,7 @@ On the Virtual Multicomp, load hex files specified on the command line, to overw
 	./virtual-multicomp test.ihx
 	./virtual-multicomp SCMonitor-v100-R1-RC2014-08k-ROM.hex test_RC2014_8400.hex
 	
-links:
+## links:
 	
 	TCC		
 		Tiny C used to rebuild rcasm to allow for address inc feature of SC/MP
@@ -192,7 +195,7 @@ links:
 		https://github.com/doug-h-rice/virtual-multicomp
 	
 	
-Small Computer Monitor - RC2014
+## Small Computer Monitor - RC2014
 	
 	;*help
 	;Small Computer Monitor by Stephen C Cousins (www.scc.me.uk)
@@ -214,11 +217,34 @@ Small Computer Monitor - RC2014
 	;*g8400
 	;!>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklm
 
-6809
+When using the real RC2104 with a real UART and using Putty on Linux, it is possible to cat the hex file to upload new code.
 
-A version for 6809 is included. See comments in file below.
+CAT test_RC2014_8400.hex > /dev/ttyUBS0
+
+If you use cat to upload code, you cannot use the keyboard.
+
+cat test_RC2014_8400.hex  | ./virtual-multicomp
+type test_RC2014_8400.hex | ./virtual-multicomp
+
+
+You can copy and past the intel hex to upload it as well.
+e.g. open test_RC2014_8400.hex in a text editor, select all, copy and paste into window.
+
+use d8400 to disassemble and g8400 to run it.
+
+
+## 6809 virtual Multicomp
+
+A version for 6809 is included. See comments in files.
+
 These three files builds a virtualMulticomp for 6809. Download the ROMS from the suggested sites.
 
     virtual.c     
     6809v.c
     6809.h
+
+This is based on 6809.zip which has a monitor to single step the 6809 code.
+
+Download the ROMS from the suggested sites.
+
+I used the assembler in as.zip as used by Grant Searle to build his BASIC for 6809.
