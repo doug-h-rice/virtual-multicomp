@@ -1,0 +1,219 @@
+8060scmp -> Native, Doug Rice, 12/08/2012, 10/4/2017,23/01/2020,25/01/2020 see test8060def.asm
+CLASS rg
+(0)=0,(1)=1,(2)=2,(3)=3,(P0)=0,(P1)=1,(P2)=2,(P3)=3
+CLASS mode
+@=4
+CLASS pp
+0=0,1=1,2=2,3=3,P0=0,P1=1,P2=2,P3=3
+*
+##---------------------------------------------
+
+DB      \L
+\1
+DW      \M
+\1
+DS	\W
+\B1
+END     \W
+\S1
+EQU     \W
+\E1
+ORG     \W
+\O1
+.DB      \L
+\1
+.DW      \M
+\1
+.DS	\W
+\B1
+.END     \W
+\S1
+.END_     
+\S
+.EQU     \W
+\E1
+.ORG     \W
+\O1
+##---------------------------------------------
+
+LDI	\W
+C4 lo(1)
+LDI	H(\W)
+C4 hi(1)
+LDI	L(\W)
+C4 lo(1)
+LDR	\E
+C0 \1
+LD	\{mode}\B\{rg}
+C0|1|3 lo(2)
+LD	\B\{rg}
+C0|2 lo(1)
+LD \E
+C0 \1
+STI	\W
+CC lo(1)
+STR	\E
+C8 \1
+ST	\{mode}\B\{rg}
+C8|1|3 lo(2)
+ST	\B\{rg}
+C8|2 lo(1)
+ST	\E
+C8 \1
+ANI	\W
+D4 lo(1)
+ANDR	\E
+D0 \1
+AND	\{mode}\B\{rg}
+D0|1|3 lo(2)
+AND	\B\{rg}
+D0|2 lo(1)
+AND	\E
+D0 \1
+ORI	\W
+DC lo(1)
+ORR	\E
+D8 \1
+OR	\{mode}\B\{rg}
+D8|1|3 lo(2)
+OR	\B\{rg}
+D8|2 lo(1)
+OR	\E
+D8 \1
+XRI	\W
+E4 lo(1)
+XORR	\E
+E0 \1
+XOR	\{mode}\B\{rg}
+E0|1|3 lo(2)
+XOR	\B\{rg}
+E0|2 lo(1)
+XOR	\E
+E0 \1
+DAI	\W
+EC lo(1)
+DADR	\E
+E8 \1
+DAD	\{mode}\B\{rg}
+E8|1|3 lo(2)
+DAD	\B\{rg}
+E8|2 lo(1)
+DAD	\E
+E8 \1
+ADI	\W
+F4 lo(1)
+ADDR	\E
+F0 \1
+ADD	\{mode}\B\{rg}
+F0|1|3 lo(2)
+ADD	\B\{rg}
+F0|2 lo(1)
+ADD	\E
+F0 \1
+CAI	\W
+FC lo(1)
+CADR	\E
+F8 \1
+CAD	\{mode}\B\{rg}
+F8|1|3 lo(2)
+CAD	\B\{rg}
+F8|2 lo(1)
+CAD	\E
+F8 \1
+##---------------------------------------------
+
+ILDR	\E
+A8 \1
+ILD	\E
+A8 \1
+ILD	\{mode}\B\{rg}
+A8|1|3 lo(2)
+ILD	\B\{rg}
+A8|2 lo(1)
+DLDR	\E
+B8 \1
+DLD	\E
+B8 \1
+DLD	\{mode}\B\{rg}
+B8|1|3 lo(2)
+DLD	\B\{rg}
+B8|2 lo(1)
+##---------------------------------------------
+
+JMP	\D
+90 \1
+JMP	\D\{rg}
+90|2 |1
+JP	\D
+94 \1
+JP	\D\{rg}
+94|2 |1
+JZ	\D
+98 \1
+JZ	\D\{rg}
+98|2 |1
+JNZ	\D
+9C \1
+JNZ	\D\{rg}
+9C|2 |1
+##---------------------------------------------
+
+DLY	\B
+8F \1
+##---------------------------------------------
+
+lde
+40
+xae
+01
+ane
+50
+ore
+58
+xre
+60
+dae
+68
+ade
+70
+cae
+78
+##---------------------------------------------
+
+xpal	\{pp}
+30|1 	
+xpah 	\{pp}
+34|1 	
+xppc 	\{pp}
+3C|1
+##---------------------------------------------
+
+sio
+19
+sr
+1C
+srl
+1D
+rr
+1E
+rrl
+1F
+halt
+00
+ccl
+02
+scl
+03
+dint
+04
+ien
+05
+csa
+06
+cas
+07
+nop
+08
+##---------------------------------------------
+
+*
