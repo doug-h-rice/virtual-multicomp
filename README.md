@@ -129,6 +129,7 @@ The crt.s file sets up the stack pointer and jumps to main.
 
 putchar_mc.s has putchar() and getchar() which use the simulated UART between the Z80 and the PC.
 
+```
  /*
  3.5.2 Z80/Z180/eZ80 intrinsic named address spaces
  3.5.2.1 __sfr (in/out to 8-bit addresses)
@@ -152,6 +153,10 @@ putchar_mc.s has putchar() and getchar() which use the simulated UART between th
   while( !( uartStatus & 0x01 ) );
   return ( int )uartData;
  }
+```
+This is a picture of the simplified UART 
+
+[ z80 uses uart to communiate with virtual-multicomp host](http://www.dougrice.plus.com/dev/asm6809/img/img30thumb.png)
 
 ## Build on Linux and Windows using Tiny C
 
@@ -161,15 +166,15 @@ To build virtual-multicomp.exe  on Windows PC use do_both.bat and Fabrice Bellar
 
 Copy the virtual-multicomp folder to the TinyC folder where tcc.exe is
 
-  	..\tcc virtual-multicomp.c ihex.c simz80.c   
+`  	..\tcc virtual-multicomp.c ihex.c simz80.c   `
   	
 	
 Run emulator using
 
- 	./virtual-multicomp 
+` 	./virtual-multicomp` 
 or
 
-  	virtual-multicomp.exe 
+` 	virtual-multicomp.exe` 
 
 SDCC verion used during testing:
 pi@raspberrypi:~/Desktop/virtual_multicomp $ sdcc -v
