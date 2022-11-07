@@ -1,4 +1,4 @@
-/*   Virtual Multicomp.
+﻿/*   Virtual Multicomp.
  * 
  *   inspired by http://searle.hostei.com/grant/#MyZ80 
   Grant Searle has a new Website http://searle.wales/ to replace http://searle.hostei.com/grant/
@@ -381,20 +381,21 @@ void	_endthreadex	(unsigned);
  * 
 */
 
-    load_ihex("BASIC.HEX", ram);
+//    load_ihex("BASIC.HEX", ram);
 //	load_ihex("basic_gs47b.hex", ram);
 
-	// try SDCC generated hex file
-    load_ihex("test.ihx", ram);
+    // try SDCC generated hex file
+    //load_ihex("test.ihx", ram);
+    load_ihex("test2.ihx", ram);
 
 /*
 ;Small Computer Monitor by Stephen C Cousins (www.scc.me.uk)
 ;Version 1.0.0 configuration R1 for Z80 based RC2014 systems
 */
 
-    load_ihex("SCMonitor-v100-R1-RC2014-08k-ROM.hex", ram);
-	/*    ./virtual-multicomp test_RC2014_8400.hex */
-    load_ihex("test_RC2014_8400.hex", ram);
+//    load_ihex("SCMonitor-v100-R1-RC2014-08k-ROM.hex", ram);
+/*    ./virtual-multicomp test_RC2014_8400.hex */
+//    load_ihex("test_RC2014_8400.hex", ram);
        
    
 /*
@@ -437,7 +438,7 @@ void	_endthreadex	(unsigned);
     printf("Running Z80 code...\n");
 
 
-	uartStatus = 0x02;
+    uartStatus = 0x02;
     ram[0x10000] = ram[0]; // Make GetWord[0xFFFF) work correctly
     simz80(pc, t_sim_delay, sim_delay);
     exit(0);
