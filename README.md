@@ -95,6 +95,8 @@ For the Z80 code this was useful to explain the .s and .c files:-
 
 http://www.cpcmania.com/Docs/Programming/Introduction_to_programming_in_SDCC_Compiling_and_testing_a_Hello_World.htm
 
+Also see the SDCC documentation.
+
 To build z80 code loaded from test.ihx to run on the multicomp board I installed SDCC from 
 
 http://sdcc.sourceforge.net/
@@ -121,11 +123,43 @@ or
   	sdcc.exe -V -mz80 --code-loc 0x0138 --data-loc 0 --no-std-crt0 crt0_mc.rel putchar_mc.rel test.c
   	sdldz80.exe -u -nf test.lk
  
-NOTE: --data-loc 0 needs moving but works for now. The CPU resets to 0x0000.
+NOTE: --data-loc 0 needs moving but works for now. The CPU resets to 0x0000. 
+
+The crt.s file sets up the stack pointer and jumps to main.
+
+putchar_mc.s has putchar() and getchar() which use the simulated UART between the Z80 and the PC.
+
+ /*
+ 3.5.2 Z80/Z180/eZ80 intrinsic named address spaces
+ 3.5.2.1 __sfr (in/out to 8-bit addresses)
+ The Z80 family has separate address spaces for memory and input/output memory. I/O memory is accessed with
+ special instructions, e.g.:
+ */
+ __sfr __at 0x78 IoPort; /* define a var in I/O space at 78h calledIoPort */
+
+ /* UART */
+ __sfr __at 0x81 uartData;   
+ __sfr __at 0x80 uartStatus; 
+ 
+ int putchar( int c ){
+  while( !(uartStatus & 0x02) );
+  uartData = ( char ) c;
+  return c;
+ }
+
+ int getchar(){
+  // wait 
+  while( !( uartStatus & 0x01 ) );
+  return ( int )uartData;
+ }
+
+## Build on Linux and Windows using Tiny C
 
 To build virtual-multicomp on linux use make
 
 To build virtual-multicomp.exe  on Windows PC use do_both.bat and Fabrice Bellards Tiny C
+
+Copy the virtual-multicomp folder to the TinyC folder where tcc.exe is
 
   	..\tcc virtual-multicomp.c ihex.c simz80.c   
   	
@@ -143,6 +177,8 @@ SDCC : mcs51/z80/z180/r2k/r3ka/gbz80/tlcs90/ds390/TININative/ds400/hc08/s08/stm8
 published under GNU General Public License (GPL)
 
 This was before getchar() returned int.
+
+## LINUX CRLF issues - work around
 
 3/1/2020 - BASIC.HEX - The TCC compiled version works, but the LINUX/GCC compiled version did not get past the "Memory?" prompt.  
 
@@ -186,7 +222,8 @@ On the Virtual Multicomp, load hex files specified on the command line, to overw
 
 	RCASM
 	I found an assembler that I could get to understand SC/MP machine code.
-	http://www.elf-emulation.com/rcasm.html
+	http://www.elf-emulation.com/rcasm.html is eturning 404 so I added the rcasm
+	run make and copy rcasm, rclink and z80.def to parent folder. 
 
 	SCM
 	    this super monitor came with the RC2014 and works on multicomp.				
@@ -251,8 +288,11 @@ Download the ROMS from the suggested sites.
 I used the assembler in as.zip as used by Grant Searle to build his BASIC for 6809.
 
 ## More Makefile targets
+	
+These allow the virtual-multicomp to be started in BASIC, SCM monitor or various test code compiled from test.c or test.asm. 
+Or you can edit the source code to include the hex file of choice.
 
-make basic 
+make basic  
 
 make monitor
 
@@ -264,4 +304,10 @@ make test2
 
 make rc
 
-rcasm is an assembler also  used for my sc/mp projects.
+rcasm is an assembler also used for my sc/mp projects. I added 8060.def and a new acmcmds.c modified for sc/mp 
+It was found on the elfcosmac web site.
+	
+## Conclusions
+	
+It allows some exprimenting with z80 code in C and assembler using the SDCC tools and the rcasm assembler.
+
