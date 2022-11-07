@@ -6,8 +6,9 @@ This allows a hex file to be tested in a simulator, before building into the FPG
 
 Doug Rice 
 24/09/2019, 
-29/09/2019
-25/05/2020
+29/09/2019,
+25/05/2020,
+07/11/2022
 
 Tested on LINUX Raspberry Pi Strech PC version and Windows with TinyC from https://bellard.org/tcc/
 
@@ -248,3 +249,19 @@ This is based on 6809.zip which has a monitor to single step the 6809 code.
 Download the ROMS from the suggested sites.
 
 I used the assembler in as.zip as used by Grant Searle to build his BASIC for 6809.
+
+## More Makefile targets
+
+make basic 
+
+make monitor
+
+make scm
+
+make test
+
+make test2
+
+make rc
+
+rcasm is an assembler also  used for my sc/mp projects.
