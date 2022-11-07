@@ -155,8 +155,30 @@ putchar_mc.s has putchar() and getchar() which use the simulated UART between th
  }
 ```
 This is a picture of the simplified UART 
+```
+/*
+ * Multicomp uses 68B50 UART - emulate just enough
+ * the control register is addressed on port 80H 
+ * the    data register is addressed on port 81H.
+ *
+ */
+ ```
+ ```
+ ==========================
+ Port 	UARTS - 6402
+ ==========================
+  1	Data received
+  2	Transmit buffer empty
+  3	NC
+  4	NC
+  5	Frame error
+  6	Parity error
+  7	Overrun error
+  8 	NC 
+ ==========================
+ ```
 
-[ z80 uses uart to communiate with virtual-multicomp host](http://www.dougrice.plus.com/dev/asm6809/img/img30thumb.png)
+![ z80 uses uart to communiate with virtual-multicomp host](http://www.dougrice.plus.com/dev/asm6809/img/img30thumb.png)
 
 ## Build on Linux and Windows using Tiny C
 
