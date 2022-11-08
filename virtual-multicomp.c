@@ -1,4 +1,4 @@
-﻿/*   Virtual Multicomp.
+/*   Virtual Multicomp.
  * 
  *   inspired by http://searle.hostei.com/grant/#MyZ80 
   Grant Searle has a new Website http://searle.wales/ to replace http://searle.hostei.com/grant/
@@ -381,12 +381,13 @@ void	_endthreadex	(unsigned);
  * 
 */
 
-//    load_ihex("BASIC.HEX", ram);
-//	load_ihex("basic_gs47b.hex", ram);
+//  load_ihex("min.hex", ram);
+//  load_ihex("BASIC.HEX", ram);
+//  load_ihex("basic_gs47b.hex", ram);
 
-    // try SDCC generated hex file
-    //load_ihex("test.ihx", ram);
-    load_ihex("test2.ihx", ram);
+// try SDCC generated hex file
+//  load_ihex("test.ihx", ram);
+//  load_ihex("test2.ihx", ram);
 
 /*
 ;Small Computer Monitor by Stephen C Cousins (www.scc.me.uk)

@@ -4,7 +4,6 @@
 ##CC=gcc -std=c99 
 CC=gcc 
 
-
 # full speed or debugging to taste
 OPTIMIZE=-O2
 #OPTIMIZE=-g
@@ -12,7 +11,15 @@ OPTIMIZE=-O2
 WARN=-Wall -Wno-parentheses
 CFLAGS=$(OPTIMIZE) $(WARN) 
 
+bare: 
+	sdasz80 -l -o crt0_mc.s
+	sdcc -V -mz80  --no-std-crt0 crt0_mc.rel bare.c   
+	/usr/bin/sdldz80 -u -nf bare.lk
 
+min: 
+	./rcasm -dz80 -l -h min.asm
+#	./virtual-multicomp min.hex
+    
 all:  test.rst test2.rst  virtual-multicomp 
 	./virtual-multicomp 
 	./virtual-multicomp SCM.hex test.ihx
@@ -30,16 +37,11 @@ test2:  test2.rst  virtual-multicomp
 	./virtual-multicomp test.ihx
 	./virtual-multicomp SCM.hex test2.ihx
 
-
 basic:
 	./virtual-multicomp  BASIC.HEX
 
 monitor:
 	./virtual-multicomp  SCM.hex
-
-#
-# http://www.dougrice.plus.com/mk14/rcasm-SadEngineer.zip
-#
 
 scm:
     # build assembler
