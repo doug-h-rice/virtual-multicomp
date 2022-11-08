@@ -166,7 +166,7 @@ E9
 JP	\{COND},\W
 C2|1<3 lo(2) hi(2)
 JP	\W
-C3 lo(1) hi(1)
+C3 lo(1),hi(1)
 JR	\{JRCOND},\D
 20|1<3 \2
 JR	\D
