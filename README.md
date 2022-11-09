@@ -2,6 +2,12 @@
 
 This is A Z80 simulator based on Grant Searle's Z80 MultiComp board. It includes a version for 6809 as well.
 
+http://searle.wales/ 
+
+http://searle.x10host.com/z80/SimpleZ80.html
+
+![grant's circuit](http://searle.x10host.com/z80/Z80SbcSchematic1.3.gif)
+
 This allows a hex file to be tested in a simulator, before building into the FPGA or EPROM
 
 Doug Rice 
@@ -260,6 +266,9 @@ On the Virtual Multicomp, load hex files specified on the command line, to overw
 		https://github.com/doug-h-rice/virtual-multicomp
 	
 	
+	
+![RC2014 backplane ](http://www.dougrice.plus.com/dev/asm6809/img/imgs_11_rc2014_z80.jpg)
+
 ## Small Computer Monitor - RC2014
 	
 	;*help
@@ -331,10 +340,42 @@ make test2
 
 make rc
 
+## min.asm
+
+min.asm is a minimal assembler program that is assembled using RCASM. I hand coded min.nas which can be loaded.  
+
+
+make min
+
+## bare.c
+
+bare.c was supposed to be the minimum code which. 
+
+bare.c does:-  while (1){ putchar( getchar() ); } 
+
+It has UART code examples.
+
+bare.c is built for Z80, linux, and AT89C5131 or 8051 
+
+make bare0
+
+make bare1
+
+make bare2
+
+make bare3
+
+* bare0 z80 UART in .s file
+* bare1 z80 UART in bare.c file
+* bare2 gcc version - no UART
+* bare3 AT89C5131 dable - needs more work.
+
 rcasm is an assembler also used for my sc/mp projects. I added 8060.def and a new acmcmds.c modified for sc/mp 
-It was found on the elfcosmac web site.
+It was found on the elfcosmac web site. The site has gone and I added the source code. the Z80.def file had a bug for  jp label.
+	
 	
 ## Conclusions
 	
 It allows some exprimenting with z80 code in C and assembler using the SDCC tools and the rcasm assembler.
 
+![waves ](http://www.dougrice.plus.com/images/imgWiki_AT049.jpg)
