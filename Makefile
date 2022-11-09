@@ -27,15 +27,13 @@ all:  test.rst test2.rst  virtual-multicomp
 
 test:  test.rst  virtual-multicomp 
 	./virtual-multicomp test.ihx
-	./virtual-multicomp SCM.hex test.ihx
 
 test1:  test1.rst  virtual-multicomp 
 	./virtual-multicomp test1.ihx
 
 
 test2:  test2.rst  virtual-multicomp 
-	./virtual-multicomp test.ihx
-	./virtual-multicomp SCM.hex test2.ihx
+	./virtual-multicomp test2.ihx
 
 basic:
 	./virtual-multicomp  BASIC.HEX

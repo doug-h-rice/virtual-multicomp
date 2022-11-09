@@ -3,32 +3,16 @@
 ;
 ; 08/11/2022 Doug Rice
 ;
-; Description: This generates some code at 0x8400
+; Description: This generates some code at 0x0
 ; 
-; this file tests the RCASM Z80.def
+; this file uses the RCASM Z80.def
 ;
 ; build rcasm using Tiny C 
 ; ..\tcc rcasm.c asmcmds.c mstrings.c support.c
 ; 
-; 07/02/2020 Doug Rice
+; 09/11/2022 Doug Rice
 ;
-; Set putty to 115200 baud
-; to upload to RC2104 using the SCM pipe hex file to serial port
-;
-; stty -F /dev/ttyUSB0 -a
-;
-; ./rcasm -dz80 -l -h test_RC2014_8400.asm
-;
-; to upload the code to the RC2014  
-;  cat test_RC2014_8400.hex > /dev/ttyUSB0
-;
-; Check SCM has displayed
-; Set putty to 115200 baud
-;
-; * READY
-; *d8400
-;
-;  echo -e "g8400\n\r" > /dev/ttyUSB0
+; ./rcasm -dz80 -l -h min.asm
 ;
 ; links:	
 ;	TCC		
@@ -38,37 +22,35 @@
 ;	RCASM
 ;		I found an assembler that I could get to understand SC/MP machine code.
 ;		http://www.elf-emulation.com/rcasm.html
-
-Mem:		equ 08000h
-
+;
 
 	org	0h
 	jp init
-		
+			
 	org	100h
-	
 init:
+; set stack pointer to top of RAM
 	ld  sp, 0ffffh        
 	
-	
-	
-    ld    a,'>'
-    out	  (081h),a
+	ld    a,'>'
+	out	  (081h),a
+
 	
 loop:	
 
-
+;
+; while( TRUE ){
+;  putchar( getchar(); );
+; }
 	
 getchar:      
 	; test and block if no key available.
-    in	a,(080h)    ; the control register is addressed on port 80H
+	in	a,(080h)    ; the control register is addressed on port 80H
 	and 01h
 	jr	z,getchar
-    
-getchar2:    
+
 	in a,(081h)
 	push af
-
 
 putchar:	
 	; test and block if still sending last char
@@ -76,11 +58,12 @@ putchar:
 	;test TX_empty bit.		  	
 	and 02h	
 	jr  z,putchar
+
+	pop af
+	out	  (081h),a
     
-    pop af
-    out	  (081h),a
     
-    jp getchar
+	jp loop
 	 
 	ret
 

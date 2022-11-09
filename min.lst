@@ -1,0 +1,77 @@
+./rcasm -dz80 -l -h min.asm
+    1 0000:             ;
+    2 0000:             ; File: min.asm tests RCASM Assembler generating Z80 code
+    3 0000:             ;
+    4 0000:             ; 08/11/2022 Doug Rice
+    5 0000:             ;
+    6 0000:             ; Description: This generates some code at 0x0
+    7 0000:             ; 
+    8 0000:             ; this file uses the RCASM Z80.def
+    9 0000:             ;
+   10 0000:             ; build rcasm using Tiny C 
+   11 0000:             ; ..\tcc rcasm.c asmcmds.c mstrings.c support.c
+   12 0000:             ; 
+   13 0000:             ; 09/11/2022 Doug Rice
+   14 0000:             ;
+   15 0000:             ; ./rcasm -dz80 -l -h min.asm
+   16 0000:             ;
+   17 0000:             ; links:	
+   18 0000:             ;	TCC		
+   19 0000:             ;		Tiny C used to rebuild rcasm to allow for address inc feature of SC/MP
+   20 0000:             ; 		http://bellard.org/tcc/
+   21 0000:             ;
+   22 0000:             ;	RCASM
+   23 0000:             ;		I found an assembler that I could get to understand SC/MP machine code.
+   24 0000:             ;		http://www.elf-emulation.com/rcasm.html
+   25 0000:             ;
+   26 0000:             
+   27 0000:             	org	0h
+   28 0000: c3 00 01    	jp init
+   29 0003:             			
+   30 0003:             	org	100h
+   31 0100:             init:
+   32 0100:             ; set stack pointer to top of RAM
+   33 0100: 31 ff ff    	ld  sp, 0ffffh        
+   34 0103:             	
+   35 0103: 3e 3e       	ld    a,'>'
+   36 0105: d3 81       	out	  (081h),a
+   37 0107:             
+   38 0107:             	
+   39 0107:             loop:	
+   40 0107:             
+   41 0107:             ;
+   42 0107:             ; while( TRUE ){
+   43 0107:             ;  putchar( getchar(); );
+   44 0107:             ; }
+   45 0107:             	
+   46 0107:             getchar:      
+   47 0107:             	; test and block if no key available.
+   48 0107: db 80       	in	a,(080h)    ; the control register is addressed on port 80H
+   49 0109: e6 01       	and 01h
+   50 010b: 28 fa       	jr	z,getchar
+   51 010d:             
+   52 010d: db 81       	in a,(081h)
+   53 010f: f5          	push af
+   54 0110:             
+   55 0110:             putchar:	
+   56 0110:             	; test and block if still sending last char
+   57 0110: db 80       	in	a,(080h)  ; the control register is addressed on port 80H   
+   58 0112:             	;test TX_empty bit.		  	
+   59 0112: e6 02       	and 02h	
+   60 0114: 28 fa       	jr  z,putchar
+   61 0116:             
+   62 0116: f1          	pop af
+   63 0117: d3 81       	out	  (081h),a
+   64 0119:                 
+   65 0119:                 
+   66 0119: c3 07 01    	jp loop
+   67 011c:             	 
+   68 011c: c9          	ret
+   69 011d:             
+
+
+69 Lines assembled
+0 Errors
+4 Labels
+Object Code:32 bytes
+

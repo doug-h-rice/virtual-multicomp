@@ -116,3 +116,125 @@ void load_ihex(const char *file, unsigned char *memory)
 	printf(" Loaded file:%s: \n",file);
   
 }
+
+
+ 
+int load_both_formats(char *file, unsigned char *memory) {
+   int hex_read, hex_len, hex_addr, hex_cmd ;
+   int hex_count, hex_data, hex_check ;
+   
+   /*0F58 00 00 00 00 00 00 00 00 00*/
+   int a, b1, b2, b3, b4, b5, b6, b7, b8, b9;
+   char c10, c11;
+   long last,now;
+
+  
+   FILE *stream = fopen( file,"rb");
+   printf("\n === loading: %s ", file );
+
+   if (!stream) {
+	   stream=0;
+       printf("error loading file: %s", file );
+	   return (1==0);
+   }
+
+
+   /* use ftell() to check for read errors */
+   last=0;
+   now=0;
+   while ( !feof( stream ) ) {
+/*
+ * 
+ * .ihx format and .hex format
+:180FDC00F6C40135C20031C100CA00C20131C100CA01C4FFCA0F925D84
+:00000001FF
+ * 
+ *
+:len addr 00 xx xx xx .. check                                        
+:18  0FDC 00 F6C40135C20031C100CA00C20131C100CA01C4FFCA0F925D84
+:18  0FDC 00 F6C40135C20031C100CA00C20131C100CA01C4FFCA0F925D84
+:0E  100E 00 6C6C6F20646F75670A00DDE5DD21 F4 
+ *  
+ */
+ 	   	   
+   /*:0E 100E 00 6C6C6F20646F75670A00DDE5DD21 F4 */
+//     printf( "\nftell: %ld\n", ftell(stream) );
+     
+     hex_read = fscanf(stream,":%2x%4x%2x",&hex_len,&hex_addr,&hex_cmd);
+
+     if ( hex_read ){
+       // printf( "\n%x  %2d, %2X, %x  : ", hex_read, hex_len, hex_addr, hex_cmd );
+       for( hex_count= 0 ; hex_count < hex_len ; hex_count++ ){
+         /* limit address */ 
+		 hex_addr = hex_addr & 0xFFFF;
+		   
+	     hex_read = fscanf(stream, "%2x",&hex_data ); 	  
+         printf(" %02X", hex_data );
+         memory[ hex_addr ] = hex_data ;
+         hex_addr ++;
+       }    
+       hex_read = fscanf(stream, "%2x\n",&hex_check);
+     }     
+   /* *.nas format   addr datax8 00 BS BS  e.g. */
+   /*0F58 00 00 00 00 00 00 00 00 00*/
+    hex_read = fscanf(stream, "%x %x %x %x %x %x %x %x %x %x%c%c\n",
+	     &a , &b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8, &b9, &c10, &c11 );
+	// printf( " %d ", hex_read );       
+	if ( hex_read == 12 ) {
+	  // printf("\n%d  [%04x]   %02x %02x %02x %02x  %02x %02x %02x %02x  %02x {%d %d}",	
+	  //   hex_read,         a,    b1,  b2, b3,    b4,   b5,  b6,  b7,  b8,   b9, (int)c10, (int)c11 );
+
+//	  if ( a > 0 ){ 
+	  if ( c10 == c11 ){ 
+		a = ( a & 0xFFFF );   
+		memory[a]   = b1;
+		memory[a+1] = b2;
+		memory[a+2] = b3;
+		memory[a+3] = b4;
+		memory[a+4] = b5;
+		memory[a+5] = b6;
+		memory[a+6] = b7;
+		memory[a+7] = b8;
+      }
+    }
+
+	/* 
+	 * 
+	 * if the fscanf's have not matched,
+	 * the position reported by ftell() does not change 
+	 * 
+	 */
+
+	/* check for error reading data */
+	 
+    now=ftell( stream );
+    if (last == now){
+		printf("\n format error @ %ld\n",now);
+		break;
+	};
+    last = now;
+   }
+   fclose(stream);
+   stream=0;
+   return (1==1)  ;
+}
+
+
+
+
+static void save_nascom(int start, int end, const char *name, unsigned char *ram)
+{
+    FILE *f = fopen(name, "w+");
+
+    if (!f) {
+        perror(name);
+        return;
+    }
+
+    for (unsigned char *p = ram + start; start < end; p += 8, start += 8)
+        fprintf(f, "%04X %02X %02X %02X %02X %02X %02X %02X %02X %02X%c%c\r\n",
+                start, *p, p[1], p[2], p[3], p[4], p[5], p[6], p[7], 0, 8, 8);
+
+    fclose(f);
+}
+

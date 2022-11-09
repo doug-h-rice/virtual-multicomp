@@ -398,6 +398,7 @@ void	_endthreadex	(unsigned);
 /*    ./virtual-multicomp test_RC2014_8400.hex */
 //    load_ihex("test_RC2014_8400.hex", ram);
        
+//    load_both_formats( "min.nas", ram );
    
 /*
  * 
@@ -406,16 +407,19 @@ void	_endthreadex	(unsigned);
 	
     printf( "\n\rCommand Line parameters:- argc: %d argv[1]: %s\n",argc,argv[1]);
 
-	if (argc > 1){
-      load_ihex(argv[1], ram);
+    if (argc > 1){
+//     load_ihex(argv[1], ram);
+      load_both_formats( argv[1], ram );
     }
 
 	if (argc > 2){
-      load_ihex(argv[2], ram);
+//      load_ihex(argv[2], ram);
+      load_both_formats( argv[2], ram );
     }
 
 	if (argc > 3){
-      load_ihex(argv[3], ram);
+//      load_ihex(argv[3], ram);
+      load_both_formats( argv[3], ram );
     }
 
     printf( "Loaded z80 hex files -resetting Z80\n\r");
