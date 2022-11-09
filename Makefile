@@ -11,17 +11,41 @@ OPTIMIZE=-O2
 WARN=-Wall -Wno-parentheses
 CFLAGS=$(OPTIMIZE) $(WARN) 
 
-bare: 
+#
+# compile bare.c for different targets
+#
+bare0:
+	# build a z80 version - UART in putchar_mc.S
 	sdasz80 -l -o crt0_mc.s
-	sdcc -V -mz80  --no-std-crt0 crt0_mc.rel bare.c   
+	sdasz80 -l -o putchar_mc.s
+	sdcc -V -mz80  --no-std-crt0 crt0_mc.rel putchar_mc.rel bare.c   
 	/usr/bin/sdldz80 -u -nf bare.lk
+	./virtual-multicomp bare.ihx
+
+bare1:
+    # build a z80 version - UART in bare.c
+	sdasz80 -l -o crt0_mc.s
+	sdcc -V -mz80  --no-std-crt0 crt0_mc.rel -DwantUART bare.c   
+	/usr/bin/sdldz80 -u -nf bare.lk
+	./virtual-multicomp bare.ihx
+
+bare2:
+	# build linux version - 
+	gcc -o bare bare.c
+	./bare
+
+bare3:
+	# http://www.dougrice.plus.com/dev/AT89C5131/doug_at.c
+	# build a _8051 version - UART in bare.c
+	sdcc -V -mmcs51 -DwantUART_8051  bare.c   
+	# see http://www.dougrice.plus.com/dev/AT89C5131/doug_at.c
+
 
 min: 
 	./rcasm -dz80 -l -h min.asm
 #	./virtual-multicomp min.hex
     
 all:  test.rst test2.rst  virtual-multicomp 
-	./virtual-multicomp 
 	./virtual-multicomp SCM.hex test.ihx
 
 
