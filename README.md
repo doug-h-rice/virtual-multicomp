@@ -229,6 +229,9 @@ A bug that delays outputting the last pressed key, until the next key is pressed
 
 23/05/2020 - You can paste BASIC code to upload it. CheckKey() now waits for UART Rx to empty before calling GetChar(). 
 
+
+
+![RC2014 backplane ](http://www.dougrice.plus.com/dev/asm6809/img/imgs_11_rc2014_z80.jpg)
 ## RC2014 also uses SBC and BASIC 
 
 I brought one of Spencer Owen's RC2014 Z80 kits. 
@@ -255,7 +258,8 @@ On the Virtual Multicomp, load hex files specified on the command line, to overw
 
 	RCASM
 	I found an assembler that I could get to understand SC/MP machine code.
-	http://www.elf-emulation.com/rcasm.html is eturning 404 so I added the rcasm
+	http://www.elf-emulation.com/rcasm.html is returning 404 so I added the rcasm. z80.def needs checking.
+	see: https://github.com/doug-h-rice/RcAsm - forked to add SC/MP 8060.def and update z80.def file.
 	run make and copy rcasm, rclink and z80.def to parent folder. 
 
 	SCM
@@ -267,7 +271,6 @@ On the Virtual Multicomp, load hex files specified on the command line, to overw
 	
 	
 	
-![RC2014 backplane ](http://www.dougrice.plus.com/dev/asm6809/img/imgs_11_rc2014_z80.jpg)
 
 ## Small Computer Monitor - RC2014
 	
