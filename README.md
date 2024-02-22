@@ -2,6 +2,12 @@
 
 This is A Z80 simulator based on Grant Searle's Z80 MultiComp board. It includes a version for 6809 as well.
 
+Most of the fun here is getting code for different microprocessor to build and run using various tools and tool chains.
+
+He provides designs for a Small Board computer, SBC, for Z80, 6809, 6505, that runs BASIC. He also has a version for an FPGA board.
+
+See:
+
 http://searle.wales/ 
 
 http://searle.x10host.com/z80/SimpleZ80.html
@@ -14,9 +20,10 @@ Doug Rice
 24/09/2019, 
 29/09/2019,
 25/05/2020,
-07/11/2022
+07/11/2022,
+22/12/2024
 
-Tested on LINUX Raspberry Pi Strech PC version and Windows with TinyC from https://bellard.org/tcc/
+It has been tested on LINUX Raspberry Pi Strech PC version and Windows with TinyC from https://bellard.org/tcc/
 
 Grant Searle's Multipcomp boards have been popular on the web. 
 
@@ -30,33 +37,30 @@ Grant Searle has a new Website http://searle.wales/ to replace  http://searle.ho
  
  https://searle.x10host.com/Multicomp/index.html
  
-
-However it would be useful to emulate the Z80 code before programming an EPROM or adding to the FPGA build.
-
-They provide a minimal component board to play with old processors.
+However it would be useful to build and emulate the Z80 code before programming an EPROM or adding to the FPGA build.
 
 The Z80 board has a:
 
-	PCB - providing wiring
-	CPU - running z80 code
+	PCB - providing wiring and glue logic for address decode.
+	CPU - running z80 code 
 	RAM - 
-	ROM - programmed with code to boot z80 and demo board. e.g. Basic
+	ROM - programmed with code to boot z80 and demo board. e.g. BASIC & serialPort
 	UART - serial interface
 
 There is a VHDL version which loads a hex file containing Z80 code. 
 
 I have found out how to upload new ROM contents without a full FPGA build using QuartusSTP.
 
-Also ported to other FPGA boards.
+It has been ported to other FPGA boards.
 
   	https://github.com/douggilliland/MultiComp/tree/master/MultiComp_On_Cyclone%20IV%20VGA%20Card
 
 
-## BASIC
+## BASIC 
 
 The hex file contains BASIC and CRT0 and code for the UART
 
-  	sbc_NascomBasic32.zip
+    sbc_NascomBasic32.zip
     int32K.asm
     bas32.asm
     TASM80.TAB
@@ -73,7 +77,11 @@ The hex file contains BASIC and CRT0 and code for the UART
 		
 Grant has modified 8kbasic.asm (found on Tommy Thorn's website) so that basic.asm and intmini.asm => BASIC.HEX
 
-I would like a software version that would allow checking of ROM images.
+It is possible to use the BASIC, but why not try assembler and C code. 
+
+The SDCC compiler can Compile C code to Z80 and many other processors. It can also be used as the assembler.
+
+I would like a software version that would allow checking of ROM images from the SDCC compiler.
 
 So here is a simple test program to run z80 loaded from test.ihx
 
@@ -162,6 +170,11 @@ putchar_mc.s has putchar() and getchar() which use the simulated UART between th
 ```
 This is a picture of the simplified UART 
 ```
+
+## UARTS
+
+The Nascom2 used the 6402 UART, the Multicomp uses the 68B05 uart.
+
 /*
  * Multicomp uses 68B50 UART - emulate just enough
  * the control register is addressed on port 80H 
@@ -171,7 +184,7 @@ This is a picture of the simplified UART
  ```
  ```
  ==========================
- Port 	UARTS - 6402
+ bit 	UARTS - 6402
  ==========================
   1	Data received
   2	Transmit buffer empty
@@ -269,6 +282,8 @@ On the Virtual Multicomp, load hex files specified on the command line, to overw
 	Virtual Multi comp
 		https://github.com/doug-h-rice/virtual-multicomp
 	
+	Also see the SDCC documentation.
+		http://sdcc.sourceforge.net/
 	
 	
 
@@ -312,7 +327,7 @@ use d8400 to disassemble and g8400 to run it.
 
 ## 6809 virtual Multicomp
 
-A version for 6809 is included. See comments in files.
+A version for 6809 is included in the folder 6809. See comments in files.
 
 These three files builds a virtualMulticomp for 6809. Download the ROMS from the suggested sites.
 
@@ -373,9 +388,11 @@ make bare3
 * bare2 gcc version - no UART
 * bare3 AT89C5131 dable - needs more work.
 
-rcasm is an assembler also used for my sc/mp projects. I added 8060.def and a new acmcmds.c modified for sc/mp 
-It was found on the elfcosmac web site. The site has gone and I added the source code. the Z80.def file had a bug for  jp label.
-	
+rcasm is an assembler also used for my sc/mp projects. I added 8060.def and a new asmcmds.c modified for sc/mp 
+It was found on the elfcosmac web site. see: https://www.elf-emulation.com/rcasm.html	
+
+The site had gone so I added the source code to my git hub The Z80.def file had a bug for  jp label.
+see: https://www.elf-emulation.com/rcasm.html	
 	
 ## Conclusions
 	
