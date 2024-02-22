@@ -1,26 +1,25 @@
 ## Virtual 6809 
 
 This provides a way to simulate code for 6809 in a command line program.
+
 A do.bat file can be edited to run the tool chain
 
-do.bat
-rem
-rem
-rem
+ do.bat
+ rem
+ rem
+ rem
 
-rem building using Tiny C 
-rem .\tcc-0.9.27-win64-bin\virtual-multicomp-master\virtual6809
+ rem building using Tiny C 
+ rem .\tcc-0.9.27-win64-bin\virtual-multicomp-master\virtual6809
 
-..\..\tcc\tcc.exe virtual.c 6809v.c
+ ..\..\tcc\tcc.exe virtual.c 6809v.c
+ pause
 
-pause
+ virtual.exe -hex ExBasROM.hex
+ pause
 
-virtual.exe -hex ExBasROM.hex
-pause
-
-virtual.exe -s19 doug.s19
-pause
-
+ virtual.exe -s19 doug.s19
+ pause
 
 
  * VirtualMultiComp for 6809
@@ -84,7 +83,9 @@ pause
  * to the code to pipe in via the UART.
  * 
  * 
- * 
+
+## Running BASIC example
+
 pi@raspberrypiwww:~/Desktop/m68/6809_multicomp $ ./virtual ExBasROM.hex -hex
 Loading code...
 AS,JF, 1.2, file ExBasROM.hex     press q to quit 
