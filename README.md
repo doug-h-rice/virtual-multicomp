@@ -51,6 +51,8 @@ There is a VHDL version which loads a hex file containing Z80 code.
 
 I have found out how to upload new ROM contents without a full FPGA build using QuartusSTP.
 
+( see http://ccgi.dougrice.plus.com/cgi-bin/wiki_doug.pl?My_Notes_On_6809 )
+
 It has been ported to other FPGA boards.
 
   	https://github.com/douggilliland/MultiComp/tree/master/MultiComp_On_Cyclone%20IV%20VGA%20Card
@@ -78,6 +80,8 @@ The hex file contains BASIC and CRT0 and code for the UART
 Grant has modified 8kbasic.asm (found on Tommy Thorn's website) so that basic.asm and intmini.asm => BASIC.HEX
 
 It is possible to use the BASIC, but why not try assembler and C code. 
+
+## SDCC compiler and assembler
 
 The SDCC compiler can Compile C code to Z80 and many other processors. It can also be used as the assembler.
 
