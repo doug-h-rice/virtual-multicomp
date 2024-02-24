@@ -35,7 +35,26 @@ pause
 
 ```
 
-Run MultiComp for 6809 
+## Build and run virtual 6809  doug.s19
+
+NOTE: virtual running doug.asm does not detect <CNTL-C> yet.
+
+```
+rem
+rem doVirtual.bat builds Virtual
+rem
+rem C:\Users\Redtop\Desktop\tcc-0.9.26-win64-bin\tcc\virtual-multicomp-master\virtual6809
+rem
+rem 
+
+..\..\tcc virtual.c 6809v.c
+pause
+
+rem run it using my assembled 689 code
+
+virtual doug.s19
+pause
+```
 
 ## Virtual 6809 
 
