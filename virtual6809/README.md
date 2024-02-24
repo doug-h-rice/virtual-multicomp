@@ -5,13 +5,43 @@ and run it in a command line program so test new HEX files.
 
 The 6809 interfaces to a 68B50 ACAI or UART chip.
 
+Use Tiny C tcc-0.9.26-win64-bin 
+
+if you use Tiny C tcc-0.9.27-win64-bin, the source code need some work.
+
+```
+rem
+rem do.bat - build as9
+rem
+rem do not use Tiny C tcc-0.9.27-win64-bin as the source code need some work
+rem
+rem Use Tiny C tcc-0.9.26-win64-bin 
+rem unzip as9.zip
+cd as9
+pause
+rem C:\Users\Redtop\Desktop\tcc-0.9.26-win64-bin\tcc\virtual-multicomp-master\virtual6809\as9
+rem unzip as9.zip
+..\..\..\tcc as9.c
+pause
+
+copy as9.exe ..
+cd .. 
+pause
+
+rem Build doug.asm into folder
+as9 doug.asm -l s19
+pause
+ rem copy as9.exe to 6809
+
+```
+
 Run MultiComp for 6809 
 
 ## Virtual 6809 
 
 This provides a way to simulate code for 6809 in a command line program.
 
-A do.bat file can be edited to run the tool chain
+A do.bat file can be edited to run the tool chain```
 ```
  rem do.bat
  rem
