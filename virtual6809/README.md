@@ -9,6 +9,20 @@ Use Tiny C tcc-0.9.26-win64-bin
 
 if you use Tiny C tcc-0.9.27-win64-bin, the source code need some work.
 
+doug.asm is a sampler file I wrote to learn 6809 assembler.
+
+Assemble doug.asm using as9
+
+Build the virtual 6809 and run it and load doug.s19 
+
+
+## Build as9 assember
+You need to build the as9 assembler using Tiny C tcc-0.9.27-win64-bin from https://bellard.org/tcc/
+
+Use tcc-0.9.26-win64-bin
+
+If you use tcc-0.9.27-win64-bin , the  source code need some work.  
+
 ```
 rem
 rem do.bat - build as9
@@ -31,8 +45,15 @@ pause
 rem Build doug.asm into folder
 as9 doug.asm -l s19
 pause
- rem copy as9.exe to 6809
 
+rem build the virtual 6809
+..\..\tcc virtual.c 6809v.c
+pause
+
+rem run it using my assembled 689 code
+
+virtual doug.s19
+pause
 ```
 
 ## Build and run virtual 6809  doug.s19
