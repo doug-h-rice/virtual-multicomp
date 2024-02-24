@@ -19,5 +19,24 @@ pause
 rem Build doug.asm into folder
 as9 doug.asm -l s19
 pause
- rem copy as9.exe to 6809
  
+rem build Virtual 6809
+rem
+rem C:\Users\Redtop\Desktop\tcc-0.9.26-win64-bin\tcc\virtual-multicomp-master\virtual6809
+rem
+rem 
+
+..\..\tcc virtual.c 6809v.c
+pause
+
+rem run 6809
+virtual doug.s19
+pause 
+
+rem
+rem Build doug.asm and run it
+rem
+as9 doug.asm -l s19
+pause
+virtual doug.s19
+pause 
