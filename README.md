@@ -76,7 +76,7 @@ See http://searle.x10host.com/cpm/index.html#ROMFiles
 
 The hex file contains BASIC and CRT0 and code for the UART.
 
-Not sure where these came from:
+From [http://searle.x10host.com/z80/SimpleZ80_32K.html](http://searle.x10host.com/z80/SimpleZ80.html)
 ```
  sbc_NascomBasic32.zip
  int32K.asm
@@ -84,6 +84,7 @@ Not sure where these came from:
  TASM80.TAB
 ```
 
+from http://searle.x10host.com/z80/SimpleZ80_32K.html
 ```
 sbc_NascomBasic.zip
  _ASSEMBLE.BAT
