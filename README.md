@@ -214,14 +214,15 @@ putchar_mc.s has putchar() and getchar() which use the simulated UART between th
   return ( int )uartData;
  }
 ```
+
 This is a picture of the simplified UART 
-```
 
 ## UARTS
 
 The Nascom2 used the 6402 UART 
 
 ```
+
 ==========================
  bit 	UARTS - 6402
 ==========================
@@ -234,19 +235,19 @@ The Nascom2 used the 6402 UART
   7	Overrun error
   8 	NC 
  ==========================
+ 
  ```
 
 The Multicomp uses the 68B05 uart.
 
-```
 /*
  * Multicomp uses 68B50 UART - emulate just enough
  * the control register is addressed on port 80H 
  * the    data register is addressed on port 81H.
  *
  */
-```
- 
+
+
 
 ![ z80 uses uart to communiate with virtual-multicomp host](http://www.dougrice.plus.com/dev/asm6809/img/img30thumb.png)
 
@@ -258,15 +259,15 @@ To build virtual-multicomp.exe  on Windows PC use do_both.bat and Fabrice Bellar
 
 Copy the virtual-multicomp folder to the TinyC folder where tcc.exe is
 
-`  	..\tcc virtual-multicomp.c ihex.c simz80.c   `
+  	..\tcc virtual-multicomp.c ihex.c simz80.c   `
   	
 	
 Run emulator using
 
-` 	./virtual-multicomp` 
+ 	./virtual-multicomp` 
 or
 
-` 	virtual-multicomp.exe` 
+ 	virtual-multicomp.exe` 
 
 SDCC verion used during testing:
 pi@raspberrypi:~/Desktop/virtual_multicomp $ sdcc -v
