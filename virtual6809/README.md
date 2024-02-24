@@ -163,3 +163,34 @@ as9 exbasrom.asm -now l s19
 "s19" produces an s19 hex file
 
 ```
+
+## as9 assembler
+
+unzip as9.zip and build a new .exe
+
+I can build it using Tiny C tcc-0.9.27-win64-bin  
+
+It gets a lot of warnings due to headers  
+The .c files do not have #includes as as9.c includes the header and all the .c files
+
+I tried copying all the source to a single file, but this still needs work 
+
+rem copy  as.h + table9.h + as.c + do9.c + eval.c + ffwd.c + output.c + pseudo.c + symtab.c + util.c aas.c
+
+rem ..\..\tcc.exe  aas.c 
+rem ..\..\tcc.exe  as9.c 
+
+pause
+as9.exe doug.asm
+as9 doug.asm -l s19
+pause
+
+
+rem adjust ..\..\tcc.exe to suit where the as9 folder is relative to the tcc-0.9.27-win64-bin is.
+..\..\tcc.exe  as9.c 
+
+pause
+as9.exe doug.asm
+as9 doug.asm -l s19
+pause
+
