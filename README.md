@@ -1,6 +1,6 @@
 # virtual-multicomp
 
-This is A Z80 simulator based on Grant Searle's Z80 MultiComp board. It includes a version for 6809 as well.
+This is A Z80 simulator based on Grant Searle's Z80 MultiComp board. It includes a version for 6809 as well. There is a 6502 version.
 
 Most of the fun here is getting code for different microprocessor to build and run using various tools and tool chains.
 
@@ -14,7 +14,7 @@ http://searle.x10host.com/z80/SimpleZ80.html
 
 ![grant's circuit](http://searle.x10host.com/z80/Z80SbcSchematic1.3.gif)
 
-This allows a hex file to be tested in a simulator, before building into the FPGA or EPROM
+virtual_multicomp allows a hex file to be tested in a simulator, before building into the FPGA or EPROM
 
 Doug Rice 
 24/09/2019, 
@@ -22,6 +22,7 @@ Doug Rice
 25/05/2020,
 07/11/2022,
 22/12/2024
+24/02/2024
 
 It has been tested on LINUX Raspberry Pi Strech PC version and Windows with TinyC from https://bellard.org/tcc/
 
@@ -40,42 +41,60 @@ Grant Searle has a new Website http://searle.wales/ to replace  http://searle.ho
 However it would be useful to build and emulate the Z80 code before programming an EPROM or adding to the FPGA build.
 
 The Z80 board has a:
+```
+ PCB - providing wiring and glue logic for address decode.
+ CPU - running z80 code 
+ RAM - 
+ ROM - programmed with code to boot z80 and demo board. e.g. BASIC & serialPort
+ UART - serial interface
+```
 
-	PCB - providing wiring and glue logic for address decode.
-	CPU - running z80 code 
-	RAM - 
-	ROM - programmed with code to boot z80 and demo board. e.g. BASIC & serialPort
-	UART - serial interface
-
-There is a VHDL version which loads a hex file containing Z80 code. 
+There is a VHDL version which loads a hex file containing Z80 code or  6809 code or 6502 code. 
 
 I have found out how to upload new ROM contents without a full FPGA build using QuartusSTP.
 
-( see http://ccgi.dougrice.plus.com/cgi-bin/wiki_doug.pl?My_Notes_On_6809 )
+see: 
+http://ccgi.dougrice.plus.com/cgi-bin/wiki.pl?My_Notes_On_6809
 
 It has been ported to other FPGA boards.
 
-  	https://github.com/douggilliland/MultiComp/tree/master/MultiComp_On_Cyclone%20IV%20VGA%20Card
+* https://github.com/douggilliland
+* https://github.com/douggilliland/MultiComp/tree/master/MultiComp_On_Cyclone%20IV%20VGA%20Card
+* https://github.com/douggilliland/MultiComp
 
+* https://land-boards.com/blwiki/index.php?title=Main_Page
+
+My notes: http://www.dougrice.plus.com/dev/asm6809/
 
 ## BASIC 
 
-The hex file contains BASIC and CRT0 and code for the UART
+Grants boards run BASIC
 
-    sbc_NascomBasic32.zip
-    int32K.asm
-    bas32.asm
-    TASM80.TAB
+See: https://github.com/feilipu/NASCOM_BASIC_4.7
 
-	sbc_NascomBasic.zip
-		_ASSEMBLE.BAT
-		TASM.EXE
-		TASM80.TAB
-		intmini.asm
-		basic.asm
-		INTMINI.HEX
-		BASIC.HEX
-		ROM.HEX
+See http://searle.x10host.com/cpm/index.html#ROMFiles
+
+The hex file contains BASIC and CRT0 and code for the UART.
+
+Not sure where these came from:
+```
+ sbc_NascomBasic32.zip
+ int32K.asm
+ bas32.asm
+ TASM80.TAB
+```
+
+```
+sbc_NascomBasic.zip
+ _ASSEMBLE.BAT
+ TASM.EXE
+ TASM80.TAB
+ intmini.asm
+ basic.asm
+ INTMINI.HEX
+ BASIC.HEX
+ ROM.HEX
+```
 		
 Grant has modified 8kbasic.asm (found on Tommy Thorn's website) so that basic.asm and intmini.asm => BASIC.HEX
 
@@ -91,8 +110,9 @@ So here is a simple test program to run z80 loaded from test.ihx
 
 The software version consists of:
 
-  ./virtual_multicomp is built using
+./virtual_multicomp is built using
   
+```
 	makefile
 	virtual-multicomp.c 
 	simz80.c 	- z80
@@ -103,13 +123,33 @@ The software version consists of:
 
 	virtual-multicomp: virtual-multicomp.o  simz80.o ihex.o  
 		$(CC) $(CWARN) $(shell sdl-config --libs) $^ -o $@ -pthread
+```
 
-On a PC with Tiny C from https://bellard.org/tcc/
-  	
-  	do_both.bat
+## On a PC with Tiny C from https://bellard.org/tcc/ and SDCC
 
+You need these tools.
 
-For the Z80 code this was useful to explain the .s and .c files:-
+* download virtual-multicomp-master.zip for the github and extract all
+* download and unzip tcc-0.9.26-win64-bin from https://bellard.org/tcc/
+* Install SDCC https://sdcc.sourceforge.net/
+
+## Using Tiny C to compile virtual-multicomp-master 
+
+copy / move the folder virtual-multicomp-master with the files in into the tcc-0.9.26-win64-bin\tcc folder
+
+In  C:\Users\Redtop\Desktop\tcc-0.9.26-win64-bin\tcc\virtual-multicomp-master run:
+```
+  do_both.bat
+```
+
+## Using Tiny C to compile virtual6809
+
+In C:\Users\Redtop\Desktop\tcc-0.9.26-win64-bin\tcc\virtual-multicomp-master\virtual6809 run:
+```
+  doBuildAS9.bat
+```
+
+## For the Z80 code this was useful to explain the .s and .c files:-
 
 http://www.cpcmania.com/Docs/Programming/Introduction_to_programming_in_SDCC_Compiling_and_testing_a_Hello_World.htm
 
@@ -128,18 +168,20 @@ Files:
     test.c
   
 built z80 code using:
-  
+
+  ```
 	sdasz80 -l -o putchar_mc.s
 	sdasz80 -l -o crt0_mc.s
 	sdcc -V -mz80 --code-loc 0x0138 --data-loc 0 --no-std-crt0 crt0_mc.rel putchar_mc.rel test.c
 	/usr/bin/sdldz80 -u -nf test.lk
+```
 or
-
-
+```
   	sdasz80.exe -l -o putchar_mc.s
   	sdasz80.exe -l -o crt0_mc.s
   	sdcc.exe -V -mz80 --code-loc 0x0138 --data-loc 0 --no-std-crt0 crt0_mc.rel putchar_mc.rel test.c
   	sdldz80.exe -u -nf test.lk
+```
  
 NOTE: --data-loc 0 needs moving but works for now. The CPU resets to 0x0000. 
 
@@ -177,19 +219,12 @@ This is a picture of the simplified UART
 
 ## UARTS
 
-The Nascom2 used the 6402 UART, the Multicomp uses the 68B05 uart.
+The Nascom2 used the 6402 UART 
 
-/*
- * Multicomp uses 68B50 UART - emulate just enough
- * the control register is addressed on port 80H 
- * the    data register is addressed on port 81H.
- *
- */
- ```
- ```
- ==========================
+```
+==========================
  bit 	UARTS - 6402
- ==========================
+==========================
   1	Data received
   2	Transmit buffer empty
   3	NC
@@ -200,6 +235,18 @@ The Nascom2 used the 6402 UART, the Multicomp uses the 68B05 uart.
   8 	NC 
  ==========================
  ```
+
+The Multicomp uses the 68B05 uart.
+
+```
+/*
+ * Multicomp uses 68B50 UART - emulate just enough
+ * the control register is addressed on port 80H 
+ * the    data register is addressed on port 81H.
+ *
+ */
+```
+ 
 
 ![ z80 uses uart to communiate with virtual-multicomp host](http://www.dougrice.plus.com/dev/asm6809/img/img30thumb.png)
 
@@ -286,7 +333,7 @@ On the Virtual Multicomp, load hex files specified on the command line, to overw
 	Virtual Multi comp
 		https://github.com/doug-h-rice/virtual-multicomp
 	
-	Also see the SDCC documentation.
+	SDCC  documentation.
 		http://sdcc.sourceforge.net/
 	
 	
@@ -344,6 +391,39 @@ This is based on 6809.zip which has a monitor to single step the 6809 code.
 Download the ROMS from the suggested sites.
 
 I used the assembler in as.zip as used by Grant Searle to build his BASIC for 6809.
+
+## 6502 virtual Multicomp
+
+I never owned a 6502 so this is to be done. The FPGA version has a 6502
+
+See http://www.dougrice.plus.com/dev/6502/ for a port from an Arduino forum post
+
+Run 6502 code in a C program.
+
+http://www.dougrice.plus.com/dev/6502/cpu6502.c
+
+Emulator for 6502 CPU running BASIC
+
+Ported by Doug Rice 18/02/2024
+
+Ported from emulator found on Arduino Forum. Modified to run in command box
+
+https://forum.arduino.cc/t/arduino-6502-emulator-basic-interpreter/188328
+
+Using Basic found at:- http://retro.hansotten.nl/6502-sbc/lee-davison-web-site/enhanced-6502-basic/
+
+It does not seem to be using Grant Searle's port of BASIC
+
+Modified to run in command box and compiled by Tiny C on Windows 10.
+
+usage:
+ rem
+ ..\tcc.exe    cpu6502.c
+ pause
+usage:
+
+ cpu6502.exe
+ exit
 
 ## More Makefile targets
 	
