@@ -3,21 +3,55 @@
 I wanted to learn about the 6809 and get a program to load HEX code
 and run it in a command line program so test new HEX files.
 
-The 6809 interfaces to a 68B50 ACAI or UART chip.
+ * based on:- Arto Salmi's 6809.
+ * http://atjs.mbnet.fi/mc6809/		
+ * http://atjs.mbnet.fi/mc6809/6809Emulators/6809.zip
+ * This has a good monitor program to test 6809 code.
 
-Use Tiny C tcc-0.9.26-win64-bin 
+Here is how to build a command line program based on Grant Searle's SBC for 6809
+
+
+Grant Searle's SBC for 6809 interfaces to a 68B50 ACIA or UART chip.
+ * VirtualMultiComp for 6809
+ * emulate a 6809 minimal component board
+ * See: http://www.searle.wales/ Grant's 6-chip 6809 computer
+ * He also has an FPGA version
+
+Here is how to build a command line version to try out code, before blowing an EPROM.
+
+## Use GCC on linux
+ * Multicomp uses 68B50 UART - emulate just enough
+ * the control register is addressed on port $FFD0 
+ * the    data register is addressed on port $FFD1
+   
+virtual.c emulates enough of 68B50 UART and used STDIN and STDOUT
+
+ * Build:
+ * gcc virtual.c 6809v.c -pthread
+   
+ * Usage: 
+ * ./virtual doug.s19
+
+To reset STDIN this may be useful
+   stty sane
+
+
+## Use Tiny C tcc-0.9.26-win64-bin on windows 
+
+Use Tiny C tcc-0.9.26-win64-bin from https://bellard.org/tcc/ 
 
 if you use Tiny C tcc-0.9.27-win64-bin, the source code need some work.
 
 doug.asm is a sampler file I wrote to learn 6809 assembler.
 
+dougs2.asm is another sampler file that uses ANSI.SYS escapes.
+
 Assemble doug.asm using as9
 
 Build the virtual 6809 and run it and load doug.s19 
 
-
-## Build as9 assember
-You need to build the as9 assembler using Tiny C tcc-0.9.27-win64-bin from https://bellard.org/tcc/
+## Build the as9 assember
+You need to build the as9 assembler using Tiny C tcc-0.9.26-win64-bin from https://bellard.org/tcc/
 
 Use tcc-0.9.26-win64-bin
 
@@ -25,9 +59,7 @@ If you use tcc-0.9.27-win64-bin , the  source code need some work.
 
 ```
 rem
-rem do.bat - build as9
-rem
-rem do not use Tiny C tcc-0.9.27-win64-bin as the source code need some work
+rem doBuildAS9.bat - build as9
 rem
 rem Use Tiny C tcc-0.9.26-win64-bin 
 rem unzip as9.zip
@@ -58,7 +90,7 @@ pause
 
 ## Build and run virtual 6809  doug.s19
 
-NOTE: virtual running doug.asm does not detect <CNTL-C> yet.
+NOTE: virtual running doug.asm does not detect CNTL-C yet.
 
 ```
 rem
@@ -71,7 +103,7 @@ rem
 ..\..\tcc virtual.c 6809v.c
 pause
 
-rem run it using my assembled 689 code
+rem run it using my assembled 6809 code
 
 virtual doug.s19
 pause
@@ -207,11 +239,13 @@ run 6809 code - use q to end.
 ./virtual doug.s19
 stty sane
 
-Use SBC ExBasicROM.HEX 
+Use SBC ExBasicROM.HEX
+ 
 The hex file  FPGA has addesses 0000 to 1FFF and used at E000 to FFFF 
 
-It does not run basic as ROMS are not locaated from 0x0000
+It does not run basic as ROMS are not located from 0x0000
 FPGA UART is at $FFD0 & $FFD1
+
 Grant's 6-chip 6809 computer has UART is at A000-BFFF SERIAL INTERFACE (minimally decoded)
 
 Memory Map
@@ -225,7 +259,6 @@ Grant has a comment about compiling the BASIC program.
 as9 exbasrom.asm -now l s19
 ./as9 ExBasRom.asm -now l s19 hex
 
-
 ./virtual ExBasRom.s19 
 
 "-now" suppresses warnings
@@ -234,33 +267,42 @@ as9 exbasrom.asm -now l s19
 
 ```
 
-## as9 assembler
+## Build and run  monitor in 6809.zip
+I modified the 6809 code in 6809.zip and called it 6809v.c
 
-unzip as9.zip and build a new .exe
+6809.zip contains a monitor that can single step through 6809 code.
 
-I can build it using Tiny C tcc-0.9.27-win64-bin  
+Extract All or unzip 6809.zip
+ 
+cd to C:\Users\redtop\Documents\Desktop\tcc-0.9.26-win64-bin\tcc\virtual-multicomp-master\virtual6809\6809\6809
 
-It gets a lot of warnings due to headers  
-The .c files do not have #includes as as9.c includes the header and all the .c files
+Add a do6809.bat batch file to build monitor
 
-I tried copying all the source to a single file, but this still needs work 
+```
+rem do6809.bat - build and run 
+..\..\..\..\tcc monitor.c 6809.c main.c
+pause
+rem run the monitor with your assembled code.  
+monitor dougs2.s19
+pause
+```
 
+## notes:- Using tcc-0.9.27-win64-bin warning
+
+When I tried using Tiny C tcc-0.9.27-win64-bin it gets lots of errors. 
+
+The as9 .c files do not have #includes as as9.c includes the header and all the .c files
+
+I tried copying all the source to a single file, but this still needs work. 
 rem copy  as.h + table9.h + as.c + do9.c + eval.c + ffwd.c + output.c + pseudo.c + symtab.c + util.c aas.c
-
 rem ..\..\tcc.exe  aas.c 
 rem ..\..\tcc.exe  as9.c 
-
 pause
 as9.exe doug.asm
 as9 doug.asm -l s19
 pause
-
 
 rem adjust ..\..\tcc.exe to suit where the as9 folder is relative to the tcc-0.9.27-win64-bin is.
 ..\..\tcc.exe  as9.c 
 
-pause
-as9.exe doug.asm
-as9 doug.asm -l s19
-pause
-
+Compiling an early version of  http://www.dougrice.plus.com/dev/6502/cpu6502.c triggered a Windows Defender Trojan Malware alert.
