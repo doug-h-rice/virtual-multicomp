@@ -15,11 +15,13 @@ For information on Enhanced BASIC see:-
 
 Most of the fun here is getting code for different microprocessor to build and run using various tools and tool chains.
 
+## Grant Searl's SBC 
+
+See: http://searle.wales/
+
 He provides designs for a Small Board computer, SBC, for Z80, 6809, 6505, that runs BASIC. He also has a version for an FPGA board.
 
-See:
-
-http://searle.wales/ 
+The 6502 version has tools to build the ROM.HEX file and osi_bas.lst
 
 This allows a hex file to be tested in a simulator, before building into the FPGA or EPROM
 
