@@ -1,8 +1,15 @@
-# virtual-multicomp
+# virtual-multicomp 6502
 
-This is based on Grant Searle's Z80 MultiComp board. 
+I did not have a computer with a 6502.
 
-This is a virtual version for the 6502 
+An Arduino based 6502 running enhanced Basic was on the forum.
+
+So this has a port for the Arduino 6502 and a 6502 that loads ROM.HEX from Grant's SBC project.
+
+* cpu6502arduino.c - ported from Arduino sketch runs Enhanced BASIC
+* cpu6502rom.c - Loads ROM.HEX that expects a 68B50 ASCI/ UART at $A000 & $A001
+
+https://github.com/Klaus2m5/6502_EhBASIC_V2.22 - Enhanced basic.
 
 Most of the fun here is getting code for different microprocessor to build and run using various tools and tool chains.
 
@@ -15,7 +22,7 @@ http://searle.wales/
 This allows a hex file to be tested in a simulator, before building into the FPGA or EPROM
 
 Doug Rice 
-28/12/2024
+02/03/2024
 
 However it would be useful to build and emulate the 6502 code before programming an EPROM or adding to the FPGA build.
 
@@ -25,7 +32,7 @@ The 6502 board has a:
 	CPU - running z80 code 
 	RAM - 
 	ROM - programmed with code to boot z80 and demo board. e.g. BASIC & serialPort
-	UART - serial interface
+	UART - serial interface 68B50
 
 It is possible to use the BASIC, but why not try assembler and C code. 
 
@@ -87,7 +94,7 @@ The Nascom2 used the 6402 UART, the Multicomp uses the 68B05 uart.
  ```
  ```
  ==========================
- bit 	UARTS - 6402
+ bit 	UARTS - 6402 also 68B50 similar. 
  ==========================
   1	Data received
   2	Transmit buffer empty
@@ -103,6 +110,9 @@ The Nascom2 used the 6402 UART, the Multicomp uses the 68B05 uart.
 ![ z80 uses uart to communiate with virtual-multicomp host](http://www.dougrice.plus.com/dev/asm6809/img/img30thumb.png)
 
 ## Build on Linux and Windows using Tiny C
+
+For the 6502 This is a to be done project.
+
 
 To build virtual-multicomp on linux use make
 
@@ -163,6 +173,16 @@ A bug that delays outputting the last pressed key, until the next key is pressed
 	
 ## bare.c
 
+For the 6502, still needs 68B50 uart putchar() and getchar();
+
+```
+rem 
+sdcc -help
+rem sdcc -mmos6502 --code-loc0x1000 --no-std-crt0 bare.c
+sdcc -mmos6502 --code-loc0x200 -v bare.c
+pause
+```
+
 bare.c was supposed to be the minimum code which. 
 
 bare.c does:-  while (1){ putchar( getchar() ); } 
@@ -185,6 +205,7 @@ make bare3
 * bare3 AT89C5131 dable - needs more work.
 
 rcasm is an assembler also used for my sc/mp projects. I added 8060.def and a new asmcmds.c modified for sc/mp 
+
 It was found on the elfcosmac web site. see: https://www.elf-emulation.com/rcasm.html	
 
 The site had gone so I added the source code to my git hub The Z80.def file had a bug for  jp label.
