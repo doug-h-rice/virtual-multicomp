@@ -52,7 +52,7 @@ The software version consists of:
 
 On a PC with Tiny C from https://bellard.org/tcc/
   	
-  	do_both.bat
+  	do6502.bat
 
 
 For the Z80 code this was useful to explain the .s and .c files:-
@@ -67,9 +67,11 @@ http://sdcc.sourceforge.net/
 
 ```
  /* UART */
- __sfr __at 0x81 uartData;   
- __sfr __at 0x80 uartStatus; 
- 
+
+// for 6502 using 68B50
+char  __at 0xA001 uartData;   
+char  __at 0xA000 uartStatus; 
+
  int putchar( int c ){
   while( !(uartStatus & 0x02) );
   uartData = ( char ) c;
@@ -193,7 +195,9 @@ bare.c does:-  while (1){ putchar( getchar() ); }
 
 It has UART code examples.
 
-bare.c is built for Z80, linux, and AT89C5131 or 8051 
+bare.c is built for Z80, linux, and AT89C5131 , 8051 or 6502
+
+cpu6502rom.c may need to load bare.ihx
 
 make bare0
 
