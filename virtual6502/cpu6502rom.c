@@ -156,10 +156,11 @@ static int uartTxCount = 60 ;
   //Serial.println ();
   // LOAD ROM.HEX with memory offset -
   // This needs better range checking 
+  // 
   load_ihex("ROM.HEX", &ram[0xC000] );
+  
   // try SDCC generated hex file
-  //  load_ihex("test.ihx", ram);
-  //  load_ihex("test2.ihx", ram);
+  // load_ihex("bare.ihx", ram );
 
   ram[0x10000] = ram[0]; // Make GetWord[0xFFFF) work correctly
 

@@ -42,22 +42,75 @@ bare2:
 	# build linux version - 
 	gcc -o bare bare.c
 	./bare
+	
+
+bare3:
+
+	rem 
+	sdcc -help
+	rem sdcc -mmos6502 --code-loc0x1000 --no-std-crt0 bare.c
+	sdas6500 -plosgffw   crt0.lst  crt0.s 
+	pause
+	sdcc -V -mmos6502   --model-large bare.c
+	pause
+	sdld6808 -nfiu bare.lk
+	pause
+	..\..\tcc.exe    cpu6502rom.c ihex.c
+	pause
+	cpu6502rom
+	pause
+	exit
+	
 
 * 
 * 
 * 
 */
 
+#define wantUART_6502
+
+#ifdef wantUART_6502
+/*
+ * UART - 
+ * 
+ */
+char  __at 0xA001 uartData;   
+char  __at 0xA000 uartStatus; 
+
+/*
+Writing 0x01 to this variable generates the assembly code:
+3E 01 ld a,#0x01
+D3 78 out (_IoPort),a
+*/
+
+
+
+int putchar( int c ){
+  while( !(uartStatus & 0x02) );
+  uartData = ( char ) c;
+  return c;
+}
+
+int getchar( void ){
+  // wait 
+  while( !( uartStatus & 0x01 ) );
+  return ( int )uartData;
+}
+
+#endif
+
+
 
 #define _wantUART
 
 #include <stdio.h>
-main(){
+void main( void ){
   puts("bare.c does:-  while (1){ putchar( getchar() ); } \n");
   while(1){
     putchar( getchar() );
   }
 }
+
 
 
 #ifdef wantUART
@@ -73,6 +126,7 @@ Writing 0x01 to this variable generates the assembly code:
 3E 01 ld a,#0x01
 D3 78 out (_IoPort),a
 */
+
 
 
 int putchar( int c ){
