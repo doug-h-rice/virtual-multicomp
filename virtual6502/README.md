@@ -9,7 +9,9 @@ So this has a port for the Arduino 6502 and a 6502 that loads ROM.HEX from Grant
 * cpu6502arduino.c - ported from Arduino sketch runs Enhanced BASIC
 * cpu6502rom.c - Loads ROM.HEX that expects a 68B50 ASCI/ UART at $A000 & $A001
 
-https://github.com/Klaus2m5/6502_EhBASIC_V2.22 - Enhanced basic.
+For information on Enhanced BASIC see:-
+* http://retro.hansotten.nl/6502-sbc/lee-davison-web-site/enhanced-6502-basic/
+* https://github.com/Klaus2m5/6502_EhBASIC_V2.22 - Enhanced basic.
 
 Most of the fun here is getting code for different microprocessor to build and run using various tools and tool chains.
 
