@@ -9,6 +9,25 @@ cd as9
 pause
 rem C:\Users\Redtop\Desktop\tcc-0.9.26-win64-bin\tcc\virtual-multicomp-master\virtual6809\as9
 rem unzip as9.zip
+
+
+if NOT EXIST ..\..\..\tcc (
+  cls
+  echo check location of this folder
+  echo "..\..\..\tcc"  
+  pause
+  exit
+)  
+
+
+if NOT EXIST as9 (
+  cls
+  echo unzip as9.zip
+  echo extractall as9.zip
+  pause
+  exit
+)  
+
 ..\..\..\tcc as9.c
 pause
 
