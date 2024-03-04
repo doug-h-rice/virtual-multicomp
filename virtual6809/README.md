@@ -109,6 +109,14 @@ virtual doug.s19
 pause
 ```
 
+## ANSI.SYS support on Win10 
+```
+rem powershell --help
+rem on win10 pipe to powershell to get ANSI.SYS escapes to work.
+virtual dougs2.s19 | powershell -NoLogo
+```
+
+
 ## Virtual 6809 
 
 This provides a way to simulate code for 6809 in a command line program.
