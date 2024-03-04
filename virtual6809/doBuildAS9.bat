@@ -8,13 +8,17 @@ rem unzip as9.zip
 cd as9
 pause
 rem C:\Users\Redtop\Desktop\tcc-0.9.26-win64-bin\tcc\virtual-multicomp-master\virtual6809\as9
+cd
 rem unzip as9.zip
 
 
-if NOT EXIST ..\..\..\tcc (
+if NOT EXIST ..\..\..\..\tcc (
   cls
+  
   echo check location of this folder
-  echo "..\..\..\tcc"  
+  echo "..\..\..\..\tcc"
+  cd
+  
   pause
   exit
 )  
@@ -57,5 +61,11 @@ rem Build doug.asm and run it
 rem
 as9 doug.asm -l s19
 pause
+
+rem on win10 pipe to powershell to get ANSI.SYS escapes to work.
+rem virtual dougs2.s19 | powershell
+
+rem run some 6809 code
+virtual dougs2.s19
 virtual doug.s19
 pause 
