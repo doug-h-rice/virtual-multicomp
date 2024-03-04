@@ -1,4 +1,4 @@
-rem
+chrem
 rem do.bat - build as9
 rem
 rem do not use Tiny C tcc-0.9.27-win64-bin as the source code need some work
@@ -10,6 +10,7 @@ pause
 rem C:\Users\Redtop\Desktop\tcc-0.9.26-win64-bin\tcc\virtual-multicomp-master\virtual6809\as9
 cd
 rem unzip as9.zip
+
 
 
 if NOT EXIST ..\..\..\..\tcc (
@@ -61,11 +62,14 @@ rem Build doug.asm and run it
 rem
 as9 doug.asm -l s19
 pause
+virtual doug.s19
+pause 
+
 
 rem on win10 pipe to powershell to get ANSI.SYS escapes to work.
 rem virtual dougs2.s19 | powershell
 
-rem run some 6809 code
+rem run some 6809 code examples
 virtual dougs2.s19
 virtual doug.s19
 pause 
