@@ -479,7 +479,20 @@ It was found on the elfcosmac web site. see: https://www.elf-emulation.com/rcasm
 
 The site had gone so I added the source code to my git hub The Z80.def file had a bug for  jp label.
 see: https://www.elf-emulation.com/rcasm.html	
-	
+
+## Windows Defender was reporting it as a Trojan Win32/Wacatac.B!ml
+
+*  Warning:- Windows Defender was reporting it as a Trojan Win32/Wacatac.B!ml
+*  Not sure why.
+
+  
+When developing the 6502 I got a warning. Making the RAM memory bigger stopped this
+When developing the z80  I got a warning. Making the RAM memory bigger stopped this
+
+    ram[0x10000] = ram[0]; // Make GetWord[0xFFFF) work correctly
+   
+    extern BYTE ram[MEMSIZE*1024+2];  // The +1 location is for the wraparound GetWord
+
 ## Conclusions
 	
 It allows some exprimenting with z80 code in C and assembler using the SDCC tools and the rcasm assembler.
