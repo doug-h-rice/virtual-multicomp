@@ -182,7 +182,11 @@ void delay_ms(clock_t millis)
    //  This uses a lot of cpu time to run. find out hoe to use system timer.
    clock_t endtime;
    endtime = millis + clock();
-   while( endtime > clock() )         ;
+   //while( endtime > clock() )         ;
+   // Tight loop add some sleep
+   // stopped execution triggering Trojan alert
+   //	
+   while( endtime > clock() ) sleep( 10 ) ;	
 }
 #endif
 
