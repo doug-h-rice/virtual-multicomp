@@ -71,7 +71,8 @@ extern WORD IFF;
 #ifndef MEMSIZE
 #define MEMSIZE 64
 #endif
-extern BYTE ram[MEMSIZE*1024+1];  // The +1 location is for the wraparound GetWord
+//NOTE: ram[0x10000] = ram[0]; // Make GetWord[0xFFFF) work correctly
+extern BYTE ram[MEMSIZE*1024+2];  // The +2 location is for the wraparound GetWord. Stopped Trojan Warning when I compiled.
 #ifdef MMU
 extern BYTE *pagetable[MEMSIZE/4];
 #endif
