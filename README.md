@@ -493,6 +493,28 @@ When developing the z80  I got a warning. Making the RAM memory bigger stopped t
    
     extern BYTE ram[MEMSIZE*1024+2];  // The +1 location is for the wraparound GetWord
 
+This tight loop seemed to trigger a Trojan Alert.
+```
+void delay_ms(clock_t millis)
+{
+   //  This uses a lot of cpu time to run. find out hoe to use system timer.
+   clock_t endtime;
+   endtime = millis + clock();
+   //while( endtime > clock() )  ; 
+   while( endtime > clock() ) sleep( 10 ) ;
+}
+```
+
+Microprocessors like the Z80 were clocked at 4MHz. A tight loop was okay as a timing loop.
+
+Modern CPU are clocked a lot faster.
+
+The Raspberry PICO has the PIO that can be clocked much slower than the system clock
+
+Microchip PIC have sleep that can be interupted so they do not spin
+
+Microcontrollers have timers that can interupt to allow a slow clocked process to be ticked.
+
 ## Conclusions
 	
 It allows some exprimenting with z80 code in C and assembler using the SDCC tools and the rcasm assembler.
