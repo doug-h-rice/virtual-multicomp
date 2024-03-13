@@ -14,6 +14,7 @@ rem
 sdcc -help
 rem sdcc -mmos6502 --code-loc0x1000 --no-std-crt0 bare.c
 sdas6500 -plosgffw   crt0.lst  crt0.s 
+rem get crt0.s from C:\Program Files\SDCC\lib\src\mos6502
 pause
 sdcc -V -mmos6502   --model-large bare.c
 pause
@@ -44,6 +45,7 @@ pause
 	sdcc -help
 	rem sdcc -mmos6502 --code-loc0x1000 --no-std-crt0 bare.c
 	sdas6500 -plosgffw   crt0.lst  crt0.s 
+	rem get crt0.s from C:\Program Files\SDCC\lib\src\mos6502
 	pause
 	sdcc -V -mmos6502   --model-large bare.c
 	pause
