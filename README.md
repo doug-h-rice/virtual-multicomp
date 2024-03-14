@@ -498,6 +498,17 @@ When developing the z80  I got a warning. Making the RAM memory bigger stopped t
 
 Also ihex.c seemed to trigger warnings. Adding 0xFFFF to limit address to 64K also stopped warnings.
 
+commenting out the code below stopped a trigger.
+
+```
+/*
+    for (unsigned char * p = (ram + start) ; start < end; p += 8, start += 8)
+        fprintf(f, "%04X %02X %02X %02X %02X %02X %02X %02X %02X %02X%c%c\r\n",
+                start, *p, p[1], p[2], p[3], p[4], p[5], p[6], p[7], 0, 8, 8);
+*/
+
+```
+
 ```
  memory[ hex_addr & 0xFFFF ] = hex_data ;
 ```
