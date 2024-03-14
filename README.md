@@ -485,6 +485,9 @@ see: https://www.elf-emulation.com/rcasm.html
 *  Warning:- Windows Defender was reporting it as a Trojan Win32/Wacatac.B!ml
 *  Not sure why.
 
+I had cases where I had two folders with what I though was the same source code. 
+
+When I built the code I got a warning, in one folder while the other folder did not.
   
 When developing the 6502 I got a warning. Making the RAM memory bigger stopped this
 When developing the z80  I got a warning. Making the RAM memory bigger stopped this
@@ -493,6 +496,11 @@ When developing the z80  I got a warning. Making the RAM memory bigger stopped t
    
     extern BYTE ram[MEMSIZE*1024+2];  // The +1 location is for the wraparound GetWord
 
+Also ihex.c seemed to trigger warnings. Adding 0xFFFF to limit address to 64K also stopped warnings.
+
+```
+ memory[ hex_addr & 0xFFFF ] = hex_data ;
+```
 This tight loop seemed to trigger a Trojan Alert.
 ```
 void delay_ms(clock_t millis)
