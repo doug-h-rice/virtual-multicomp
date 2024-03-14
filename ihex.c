@@ -56,7 +56,7 @@ static bool read_ihex_line(FILE *f, unsigned char *memory, unsigned *start_addr)
      KK checksum (twos compliment of sum of all bytes)
     */
 
-    int ch, count, addr, type, v, chk;
+    unsigned int ch, count, addr, type, v, chk;
 
     if ( !f ){
 		printf( "error:-file not open\n" );
@@ -120,11 +120,11 @@ void load_ihex(const char *file, unsigned char *memory)
 
  
 int load_both_formats(char *file, unsigned char *memory) {
-   int hex_read, hex_len, hex_addr, hex_cmd ;
-   int hex_count, hex_data, hex_check ;
+   unsigned int hex_read, hex_len, hex_addr, hex_cmd ;
+   unsigned int hex_count, hex_data, hex_check ;
    
    /*0F58 00 00 00 00 00 00 00 00 00*/
-   int a, b1, b2, b3, b4, b5, b6, b7, b8, b9;
+   unsigned int a, b1, b2, b3, b4, b5, b6, b7, b8, b9;
    char c10, c11;
    long last,now;
 
@@ -233,7 +233,7 @@ static void save_nascom(int start, int end, const char *name, unsigned char *ram
 
     for (unsigned char *p = ram + start; start < end; p += 8, start += 8)
         fprintf(f, "%04X %02X %02X %02X %02X %02X %02X %02X %02X %02X%c%c\r\n",
-                start, *p, p[1], p[2], p[3], p[4], p[5], p[6], p[7], 0, 8, 8);
+                start, p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], 0, 8, 8);
 
     fclose(f);
 }
