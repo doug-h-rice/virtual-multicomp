@@ -336,7 +336,7 @@ int sizeof_file (FILE *file)
 int load_hex (char *name)
 {
   FILE *fp;
-  int count, addr, type, data, checksum;
+  unsigned int count, addr, type, data, checksum;
   int done = 1;
   int line = 0;
   char cr;
@@ -410,7 +410,7 @@ int load_hex (char *name)
 int load_s19 (char *name)
 {
   FILE *fp;
-  int count, addr, type, data, checksum;
+  unsigned int count, addr, type, data, checksum;
   int done = 1;
   int line = 0;
 
