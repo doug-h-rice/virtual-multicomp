@@ -524,6 +524,9 @@ void delay_ms(clock_t millis)
 }
 ```
 
+Also added unsigned in front  of int variabled, seems to stop triggers. 
+
+
 Microprocessors like the Z80 were clocked at 4MHz. A tight loop was okay as a timing loop.
 
 Modern CPU are clocked a lot faster.
