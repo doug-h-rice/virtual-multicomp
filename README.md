@@ -485,6 +485,8 @@ see: https://www.elf-emulation.com/rcasm.html
 *  Warning:- Windows Defender was reporting it as a Trojan Win32/Wacatac.B!ml
 *  Not sure why.
 
+ihex.c seemed to be the problem. Adding unsigned infront of ints so they go from 0 to 64K helps.  
+
 I had cases where I had two folders with what I though was the same source code. 
 
 When I built the code I got a warning, in one folder while the other folder did not.
@@ -524,21 +526,40 @@ void delay_ms(clock_t millis)
 }
 ```
 
-Also added unsigned in front  of int variabled, seems to stop triggers. 
+Also added unsigned in front  of int variables, seemed to stop triggers. 
 
+## Microprocessors like the Z80, 6502 and 6809 ran much slower than modern processors.
 
 Microprocessors like the Z80 were clocked at 4MHz. A tight loop was okay as a timing loop.
 
-Modern CPU are clocked a lot faster.
+Modern CPU are clocked a lot faster. Modern code needs a different approach to spinning for the UART to become free. 
 
-The Raspberry PICO has the PIO that can be clocked much slower than the system clock
+The Raspberry PICO has the PIO that can be clocked much slower than the system clock.
 
-Microchip PIC have sleep that can be interupted so they do not spin
+Microchip PIC have sleep instructions that can be interupted by peripherals so spins are not done at full power.
 
-Microcontrollers have timers that can interupt to allow a slow clocked process to be ticked.
+Microcontrollers have timers that can interupt to allow a slow clocked process to be ticked at a more appropriate speed.
+
+These microprocessors were clocked by a constant clock chip. 
+
+These processors support bus request signals so the bus could be used by the DMA chips. 
+
+When simulating these processors, simulate by running a burst of instructions, possibly in parallel with the Windows / GUI 
+
+My Webpage simulation measured the time taken to run a burst of instructions on a regular tick, and adapted up the speed if the browser could support the speed requested.
+
+If the simulation does not adapt, the program can choke the host CPU.
+
+Games seem to adapt the frames per second speed to suit the hardware.
 
 ## Conclusions
 	
-It allows some exprimenting with z80 code in C and assembler using the SDCC tools and the rcasm assembler.
+It allows some exprimenting with Z80 code in C and assembler using the SDCC tools and the rcasm assembler.
+
+It also allows an appreciation of running clocked logic in parallel.
+
+
+
+
 
 ![waves ](http://www.dougrice.plus.com/images/imgWiki_AT049.jpg)
