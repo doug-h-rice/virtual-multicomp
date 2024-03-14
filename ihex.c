@@ -89,7 +89,7 @@ static bool read_ihex_line(FILE *f, unsigned char *memory, unsigned *start_addr)
 
 //        if (2048 <= addr && addr < 65536)
         if ( addr < 64*1024 )
-            memory[addr++] = v;
+            memory[addr++ & 0xFFFF ] = v;
     }
 
     if (read_hex(f, 2, &chk))
@@ -170,7 +170,7 @@ int load_both_formats(char *file, unsigned char *memory) {
 		   
 	     hex_read = fscanf(stream, "%2x",&hex_data ); 	  
          printf(" %02X", hex_data );
-         memory[ hex_addr ] = hex_data ;
+         memory[ hex_addr & 0xFFFF ] = hex_data ;
          hex_addr ++;
        }    
        hex_read = fscanf(stream, "%2x\n",&hex_check);
