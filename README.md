@@ -511,8 +511,10 @@ commenting out the code below stopped a trigger.
 
 ```
 
+I found this stopped the warnings. 
 ```
- memory[ hex_addr & 0xFFFF ] = hex_data ;
+ //make sure memory has ( unsigned int ) cast so 0xE000 is not memory[  -0x2000 ] 
+ memory[ ( unsigned int ) hex_addr & 0xFFFF ] = hex_data ;
 ```
 This tight loop seemed to trigger a Trojan Alert.
 ```
