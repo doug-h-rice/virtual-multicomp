@@ -84,7 +84,7 @@ void main( void ){
   printf("x:    %p \n", &x   );
   printf("key:  %p \n", &key   );
 
-  while( 1==1){  
+  while( 1==1 ){  
   
     printf("\nWelcome - press a key\n");
    
@@ -142,5 +142,5 @@ void main( void ){
     x++;   
     }
   }  
-  return 1;
+  // return 1;
 }

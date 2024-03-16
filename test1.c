@@ -69,7 +69,7 @@ void main( void ){
   char key;
   int x;
 
-  // char buffer[10];
+  //char buffer[10];
   char * buffPtr; 
   //Init
   buff[0] = '\0';
@@ -142,5 +142,5 @@ void main( void ){
     x++;   
     }
   }  
-  return 1;
+  // return 1;
 }
