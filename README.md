@@ -530,6 +530,17 @@ void delay_ms(clock_t millis)
 
 Also added unsigned in front  of int variables, seemed to stop triggers. 
 
+I added code like this to see if I was reading an address that was indexing memory[ addr ] outside its allocated memory.
+It did not indicate addr between 0x8000 and 0xFFFF were the problem.
+
+```
+ if ( &memory[0] > &memory[ hex_addr ] ) {
+   printf("\n! @ %04X %02X ", hex_addr, hex_data );	 
+ } else {
+  memory[ ( unsigned int ) hex_addr & 0xFFFF ] = hex_data ;
+ }			 	 
+```
+
 ## Microprocessors like the Z80, 6502 and 6809 ran much slower than modern processors.
 
 Microprocessors like the Z80 were clocked at 4MHz. A tight loop was okay as a timing loop.
