@@ -188,7 +188,7 @@ int load_both_formats(char *file, unsigned char *memory) {
 
 //	  if ( a > 0 ){ 
 	  if ( c10 == c11 ){ 
-		a = ( a & 0xFFFF );   
+		a = ( unsigned int ) ( a & 0xFFFF );   
 		memory[a]   = b1;
 		memory[a+1] = b2;
 		memory[a+2] = b3;
