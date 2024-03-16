@@ -56,7 +56,8 @@ static bool read_ihex_line(FILE *f, unsigned char *memory, unsigned *start_addr)
      KK checksum (twos compliment of sum of all bytes)
     */
 
-    unsigned int ch, count, addr, type, v, chk;
+//    unsigned int ch, count, addr, type, v, chk;
+    int ch, count, addr, type, v, chk;
 
     if ( !f ){
 		printf( "error:-file not open\n" );
@@ -89,8 +90,11 @@ static bool read_ihex_line(FILE *f, unsigned char *memory, unsigned *start_addr)
 
 //        if (2048 <= addr && addr < 65536)
         if ( addr < 64*1024 )
+		  if ( addr > 0x8888 ) { puts( "\naddr > out of range\n" );	}
+		  if ( addr < 0 )      { puts( "\naddr < out of range\n " );	}
+
 	    // force ( unsigned int )  cast so memory[  0xE000 ] does not become memory[ -0x2000 ]      
-            memory[ ( unsigned int ) addr++ & 0xFFFF ] = v;
+        memory[ ( unsigned int ) addr++ & 0xFFFF ] = v;
     }
 
     if (read_hex(f, 2, &chk))
@@ -121,7 +125,9 @@ void load_ihex(const char *file, unsigned char *memory)
 
  
 int load_both_formats(char *file, unsigned char *memory) {
-   unsigned int hex_read, hex_len, hex_addr, hex_cmd ;
+   printf("\nmemory[ %p ] \nmemory[ %p ] \nmemory[ %p ]\n",&memory[ 0x0000 ],&memory[ 0xe000], &memory[ -0x2000 ] );
+
+   int hex_read, hex_len, hex_addr, hex_cmd ;
    unsigned int hex_count, hex_data, hex_check ;
    
    /*0F58 00 00 00 00 00 00 00 00 00*/
@@ -167,12 +173,17 @@ int load_both_formats(char *file, unsigned char *memory) {
        // printf( "\n%x  %2d, %2X, %x  : ", hex_read, hex_len, hex_addr, hex_cmd );
        for( hex_count= 0 ; hex_count < hex_len ; hex_count++ ){
          /* limit address */ 
-		 hex_addr = hex_addr & 0xFFFF;
-		   
+		 //hex_addr = hex_addr & 0xFFFF;
+		 
 	     hex_read = fscanf(stream, "%2x",&hex_data ); 	  
          printf(" %02X", hex_data );
-	 // force ( unsigned int )  cast so memory[  0xE000 ] does not become memory[ -0x2000 ]      
-         memory[ ( unsigned int ) hex_addr & 0xFFFF ] = hex_data ;
+	     // force ( unsigned int )  cast so memory[  0xE000 ] does not become memory[ -0x2000 ]
+		 //check Address of pointers 
+		 if ( &memory[0] > &memory[ hex_addr ] ) { 
+		   printf("\n! @ %04X %02X ", hex_addr, hex_data );	 
+		 } else {
+           memory[ ( unsigned int ) hex_addr & 0xFFFF ] = hex_data ;
+         }			 	 
          hex_addr ++;
        }    
        hex_read = fscanf(stream, "%2x\n",&hex_check);
@@ -188,7 +199,10 @@ int load_both_formats(char *file, unsigned char *memory) {
 
 //	  if ( a > 0 ){ 
 	  if ( c10 == c11 ){ 
-		a = ( unsigned int )( a & 0xFFFF );   
+		a = ( unsigned int )( a & 0xFFFF );
+        if ( &memory[ 0 ] > &memory[ a ] ) { 
+          printf("\n! @ %04X %02X ", a, b1 );
+		} else {		
 		memory[a]   = b1;
 		memory[a+1] = b2;
 		memory[a+2] = b3;
@@ -197,6 +211,7 @@ int load_both_formats(char *file, unsigned char *memory) {
 		memory[a+5] = b6;
 		memory[a+6] = b7;
 		memory[a+7] = b8;
+		}
       }
     }
 

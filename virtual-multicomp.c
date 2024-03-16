@@ -366,6 +366,9 @@ void	_endthreadex	(unsigned);
 
 
     //progname = argv[0];
+//    printf("\nmemory[ %p ] memory[ %p ]\n",&memory[ 0xe000], &memory[ -0x2000 ] );
+    printf("\nmemory[ %p ] memory[ %p ]\n",&ram[ 0xe000], &ram[ -0x2000 ] );
+
     printf("Loading Z80 code...\n");
  
     //load_ihex("test.ihx", ram);
@@ -426,7 +429,7 @@ void	_endthreadex	(unsigned);
       load_both_formats( argv[3], ram );
     }
 
-    printf( "Loaded z80 hex files -resetting Z80\n\r");
+    printf( "\nLoaded z80 hex files -resetting Z80\n\r");
 
     
 /*
@@ -443,6 +446,8 @@ void	_endthreadex	(unsigned);
       printf("%02X ",ram[c]);
 	}
 */
+
+    printf("\nmemory[  0x0000 ] @ %p \nmemory[  0xE000 ] @ %p \nmemory[ -0x2000 ] @ %p \n",&ram[ 0x0000 ],&ram[ 0xe000], &ram[ -0x2000 ] );
 
     printf("Running Z80 code...\n");
 
