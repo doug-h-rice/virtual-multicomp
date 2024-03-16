@@ -21,7 +21,7 @@
 #include <stdio.h>
 
 
-main(){
+void main( void ){
   char key;
   int x;
 
