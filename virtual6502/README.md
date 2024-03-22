@@ -4,6 +4,9 @@ I did not have a computer with a 6502.
 
 An Arduino based 6502 running enhanced Basic was on the forum.
 
+* Ported from zip file found on by miker001z for Arduino 
+* https://forum.arduino.cc/t/arduino-6502-emulator-basic-interpreter/188328 
+
 So this has a port for the Arduino 6502 and a 6502 that loads ROM.HEX from Grant's SBC project.
 
 * cpu6502arduino.c - ported from Arduino sketch runs Enhanced BASIC
@@ -33,9 +36,9 @@ However it would be useful to build and emulate the 6502 code before programming
 The 6502 board has a:
 
 	PCB - providing wiring and glue logic for address decode.
-	CPU - running z80 code 
+	CPU - running 6502 code 
 	RAM - 
-	ROM - programmed with code to boot z80 and demo board. e.g. BASIC & serialPort
+	ROM - programmed with code to boot 6502 and demo board. e.g. BASIC & serialPort
 	UART - serial interface 68B50
 
 It is possible to use the BASIC, but why not try assembler and C code. 
@@ -46,6 +49,29 @@ The SDCC compiler can Compile C code to 6502 and many other processors. It can a
 
 I would like a software version that would allow checking of ROM images from the SDCC compiler.
 
+```
+#include <stdio.h>
+void main( void ){
+  puts("bare.c does:-  while (1){ putchar( getchar() ); } \n");
+  while(1){
+    putchar( getchar() );
+  }
+}
+``` 
+
+The putchar( getchar() ); code is different between the Arduino and UART based boards.
+* The arduino.ino code uses the Serial object.
+* The UART based code simulates the 68B50 ASCI/UART chip
+
+Arduino Leonardo has USB and hardware serial.
+
+The ATmega16U4/ATmega32U4 used in the Arduino Leonardo has a UART based Serial and USB based Serial. 
+It is worth looking at the arduino code, which I found at:
+
+C:\Users\Redtop\AppData\Local\Arduino15\packages\arduino\hardware\avr\1.8.5\cores\arduino
+
+This README.md was copied from the Z80, but useful for 6502 and 6809
+ 
 So here is a simple test program to run z80 loaded from test.ihx
 
 The software version consists of:
@@ -53,7 +79,6 @@ The software version consists of:
 On a PC with Tiny C from https://bellard.org/tcc/
   	
   	do6502.bat
-
 
 For the Z80 code this was useful to explain the .s and .c files:-
 
@@ -117,7 +142,7 @@ The Nascom2 used the 6402 UART, the Multicomp uses the 68B05 uart.
 
 ## Build on Linux and Windows using Tiny C
 
-For the 6502 This is a to be done project.
+For the 6502 This is an ongoing  to be done project.
 
 
 To build virtual-multicomp on linux use make
@@ -179,7 +204,7 @@ A bug that delays outputting the last pressed key, until the next key is pressed
 	
 ## bare.c
 
-For the 6502, still needs 68B50 uart putchar() and getchar();
+For the 6502, Support for the  68B50 uart putchar() and getchar(); was added. 
 
 ```
 rem 
