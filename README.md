@@ -10,9 +10,15 @@ See:
 
 http://searle.wales/ 
 
+http://searle.x10host.com/
+
 http://searle.x10host.com/z80/SimpleZ80.html
 
 ![grant's circuit](http://searle.x10host.com/z80/Z80SbcSchematic1.3.gif)
+
+http://searle.x10host.com/z80/SimpleZ80.html
+
+http://searle.x10host.com/z80/Z80SbcSchematic1.3.gif
 
 virtual_multicomp allows a hex file to be tested in a simulator, before building into the FPGA or EPROM
 
