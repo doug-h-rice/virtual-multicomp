@@ -224,6 +224,8 @@ putchar_mc.s has putchar() and getchar() which use the simulated UART between th
  }
 ```
 
+NOTE: during the life of this work, putchar() started to return an int, and some code may need an update.
+
 This is a picture of the simplified UART 
 
 ## UARTS
