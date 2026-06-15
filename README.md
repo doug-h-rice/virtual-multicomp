@@ -565,6 +565,8 @@ If the simulation does not adapt, the program can choke the host CPU.
 
 Games seem to adapt the frames per second speed to suit the hardware.
 
+Running code slower at a more appropriate speed using a timer tick saves power and extends battery life.
+
 ## Conclusions
 	
 It allows some exprimenting with Z80 code in C and assembler using the SDCC tools and the rcasm assembler.
