@@ -9,6 +9,10 @@
 * to get the .rst with hex and assembler
 * sdldz80 -u -nf test_a.lk
 * 
+* or add -Wl -u 
+* usage: sdcc -V -mz80 --code-loc0x1000 --no-std-crt0 -Wl -u test_a.c
+* 
+*
 * http://www.cpcmania.com/Docs/Programming/Introduction_to_programming_in_SDCC_Compiling_and_testing_a_Hello_World.htm
 * sdasz80 -l -o putchar_cpc.s
 * sdasz80 -l -o crt0_cpc.s
