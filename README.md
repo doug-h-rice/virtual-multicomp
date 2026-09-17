@@ -507,8 +507,11 @@ It uses V&T assembler.
 vtasm.nas has the format addr dd dd dd dd  dd dd dd dd checksum bs bs
 
  1000 3E 40 32 FA 0B DD 21 22 E5
+  
  1008 0F CD 71 20 13 C3 64 15 D4
+
  1010 29 00 00 23 05 5F 23 85 78
+
  1018 01 1C 05 00 1C 04 00 0E 78
 
 files saved using the NASCOM 2 command "T nnnn nnnn 0 0 1" does not have the checksum.
