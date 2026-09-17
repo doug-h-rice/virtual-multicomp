@@ -1,0 +1,293 @@
+#include "ihex.h"
+#include <stdio.h>
+#include <stdbool.h>
+#include <ctype.h>
+
+// return true if failed
+static bool hexdigitValue(int ch, int *v)
+{
+    if ('0' <= ch && ch <= '9')
+        *v = ch - '0';
+    else if ('A' <= ch && ch <= 'F')
+        *v = ch - 'A' + 10;
+    else if ('a' <= ch && ch <= 'f')
+        *v = ch - 'a' + 10;
+    else
+        return true;
+
+    return false;
+}
+
+static bool read_hex(FILE *f, int n, int *v)
+{
+    *v = 0;
+
+
+    if ( !f ){
+		printf( "error:-file not open\n" );
+		return false;	
+	}
+	
+    while (n-- > 0) {
+        int dv, ch = fgetc(f);
+
+        if (hexdigitValue(ch, &dv)) {
+            fprintf(stderr, "Expected hexdigit at pos %ld, got %d",
+                    ftell(f) - 1, ch);
+            return true;
+        }
+
+        *v = 16* *v + dv;
+    }
+
+    return false;
+}
+
+static bool read_ihex_line(FILE *f, unsigned char *memory, unsigned *start_addr)
+{
+    /*
+     Expect lines like this:
+     :10010000214601360121470136007EFE09D2190140
+     That is (without spaces)
+     CC AAAAA TT DD DD DD .. DD KK
+     CC is the byte count (# of DD pairs)
+     AA is the 16-bit address (offset) from base
+     TT is the type
+     KK checksum (twos compliment of sum of all bytes)
+    */
+
+//    unsigned int ch, count, addr, type, v, chk;
+    int ch, count, addr, type, v, chk;
+
+    if ( !f ){
+		printf( "error:-file not open\n" );
+		return false;	
+	}
+
+    do {
+        ch = fgetc(f);
+        if (ch < 0)
+            return false;
+    } while (ch == '\n' || ch == '\r');
+
+    if (ch != ':') {
+        fprintf(stderr, "Expected ':' at pos %ld, got %d",
+                ftell(f) - 1, ch);
+        return true;
+    }
+
+    if (read_hex(f, 2, &count) ||
+        read_hex(f, 4, &addr) ||
+        read_hex(f, 2, &type))
+        return true;
+
+    if (type == 5)
+        *start_addr = addr;
+
+    while (count-- > 0) {
+        if (read_hex(f, 2, &v))
+            return true;
+
+//        if (2048 <= addr && addr < 65536)
+        if ( addr < 64*1024 )
+		  if ( addr > 0x8888 ) { puts( "\naddr > out of range\n" );	}
+		  if ( addr < 0 )      { puts( "\naddr < out of range\n " );	}
+
+	    // force ( unsigned int )  cast so memory[  0xE000 ] does not become memory[ -0x2000 ]      
+        memory[ ( unsigned int ) addr++ & 0xFFFF ] = v;
+    }
+
+    if (read_hex(f, 2, &chk))
+        return true;
+
+    return false;
+}
+
+void load_ihex(const char *file, unsigned char *memory)
+{
+    FILE *f = fopen(file, "r");
+    unsigned start_addr = -1;
+
+    if ( f ){
+      while (!feof(f)){
+        if (read_ihex_line(f, memory, &start_addr)) {
+            printf("Couldn't load %s as ihex\n", file);
+            break;
+        }
+      }  
+    }  else {
+		printf(" failed to open :%s: \n",file);
+	}
+	printf(" Loaded file:%s: \n",file);
+  
+}
+
+int load_both_formats(char *file, unsigned char *memory) {
+   printf("\nmemory[ %p ] \nmemory[ %p ] \nmemory[ %p ]\n",&memory[ 0x0000 ],&memory[ 0xe000], &memory[ -0x2000 ] );
+
+   int hex_read, hex_len, hex_addr, hex_cmd ;
+   unsigned int hex_count, hex_data, hex_check ;
+   
+   /*0F58 00 00 00 00 00 00 00 00 00*/
+   unsigned int a, b1, b2, b3, b4, b5, b6, b7, b8, b9, checksum;
+   char c10, c11;
+   long last,now;
+
+  
+   FILE *stream = fopen( file,"rb");
+   printf("\n === loading: %s ", file );
+
+   if (!stream) {
+	   stream=0;
+       printf("error loading file: %s", file );
+	   return (1==0);
+   }
+
+
+   /* use ftell() to check for read errors */
+   last=0;
+   now=0;
+   
+   //ftell() 
+   while ( !feof( stream ) ) {
+	   
+/* look for multiple formats
+ :180FDC00F6C40135C20031C100CA00C20131C100CA01C4FFCA0F925D84
+ aaaa dd dd dd dd dd dd dd dd   
+ aaaa dd dd dd dd dd dd dd dd  dd\b\b 
+*/	
+/*
+ * 
+ * .ihx format and .hex format
+:180FDC00F6C40135C20031C100CA00C20131C100CA01C4FFCA0F925D84
+:00000001FF
+ * 
+ *
+:len addr 00 xx xx xx .. check                                        
+:18  0FDC 00 F6C40135C20031C100CA00C20131C100CA01C4FFCA0F925D84
+:18  0FDC 00 F6C40135C20031C100CA00C20131C100CA01C4FFCA0F925D84
+:0E  100E 00 6C6C6F20646F75670A00DDE5DD21 F4 
+ *  
+ */
+ 	   	   
+   /*:0E 100E 00 6C6C6F20646F75670A00DDE5DD21 F4 */
+//     printf( "\nftell: %ld\n", ftell(stream) );
+     
+	 
+     hex_read = fscanf(stream,":%2x%4x%2x",&hex_len,&hex_addr,&hex_cmd);
+
+     if ( hex_read ){
+       printf( "\n%x  %2d, [ %4X ], %x  : ", hex_read, hex_len, hex_addr, hex_cmd );
+       for( hex_count= 0 ; hex_count < hex_len ; hex_count++ ){
+         /* limit address */ 
+		 //hex_addr = hex_addr & 0xFFFF;
+		 
+	     hex_read = fscanf(stream, "%2x",&hex_data ); 	  
+         printf(" %02X", hex_data );
+	     // force ( unsigned int )  cast so memory[  0xE000 ] does not become memory[ -0x2000 ]
+		 //check Address of pointers 
+		 if ( &memory[0] > &memory[ hex_addr ] ) { 
+		   printf("\n! @ %04X %02X ", hex_addr, hex_data );	 
+		 } else {
+           memory[ ( unsigned int ) hex_addr & 0xFFFF ] = hex_data ;
+         }			 	 
+         hex_addr ++;
+       }    
+       hex_read = fscanf(stream, "%2x\n",&hex_check);
+	   // printf("\n");
+     }     
+	 
+    /* *.nas format   addr datax8 00 BS BS  e.g. */
+    /*0F58 00 00 00 00 00 00 00 00 00*/
+
+    //Trying to read .nas files dumped using "T3000 4400 0 0 1" 
+	// .nas files have 2 byte checksum followed by BS BS CRLF */
+	// files saved using "T nnnn nnnn 0 0 1" do not
+	// for now ignore checksum.
+	
+	b9 = 0 ;
+	/* read Addr and 8 data, but not checksum */
+	/* note \n is treated as white space */
+	hex_read = fscanf(stream, " %x %x %x %x %x %x %x %x %x",
+	     &a , &b1, &b2, &b3, &b4, &b5, &b6, &b7, &b8   );
+	// printf( " %d ", hex_read );       
+	printf( " %d,",hex_read);	
+	
+	// only use if enough.
+	// The checksum may or maynot be present
+	// When using T nnnn nnnn 0 0 1 , there is no checksum is output.
+	if ( hex_read > 7 ) {
+		
+		checksum = b1+b2+b3+b4+b5+b6+b7+b8 ;
+		
+	    printf("\n%d  [%04x]   %02x %02x %02x %02x  %02x %02x %02x %02x  %02x",	
+	       hex_read,  a,    b1,  b2, b3,    b4,   b5,  b6,  b7,  b8 , b9 , checksum  );
+
+      
+	  if ( a > 0 ){ 		  
+	  //if ( c10 == c11 ){ 
+		a = ( unsigned int )( a & 0xFFFF );
+        if ( &memory[ 0 ] > &memory[ a ] ) { 
+          printf("\n! @ %04X %02X ", a, b1 );
+		} else {		
+		memory[a]   = b1;
+		memory[a+1] = b2;
+		memory[a+2] = b3;
+		memory[a+3] = b4;
+		memory[a+4] = b5;
+		memory[a+5] = b6;
+		memory[a+6] = b7;
+		memory[a+7] = b8;
+		}	
+	  }
+    }
+
+	// comment out temp
+	// look for BS,BS,CR,LF
+	
+	/* 
+	 * 
+	 * if the fscanf's have not matched,
+	 * the position reported by ftell() does not change 
+	 * 
+	 */
+
+	/* check for error reading data */
+	 
+    now=ftell( stream );
+	// if no match, 
+    if (last == now){
+		// force a match 
+		//printf("\n format error @ %ld\n", now );
+		//break;
+		hex_read = fscanf(stream, "%c\n", &c10 );
+		printf("%d<%x>",hex_read,(int)(0+c10 ) );
+	};
+	
+    last = now;
+	
+   }
+   fclose(stream);
+   stream=0;
+   return (1==1)  ;
+}
+
+
+
+
+static void save_nascom(int start, int end, const char *name, unsigned char *ram)
+{
+    FILE *f = fopen(name, "w+");
+
+    if (!f) {
+        perror(name);
+        return;
+    }
+
+    for (unsigned char *p = ram + start; start < end; p += 8, start += 8)
+        fprintf(f, "%04X %02X %02X %02X %02X %02X %02X %02X %02X %02X%c%c\r\n",
+                start, p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7], 0, 8, 8);
+
+    fclose(f);
+}
+
