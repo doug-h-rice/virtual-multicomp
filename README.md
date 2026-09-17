@@ -63,7 +63,7 @@ There is a VHDL version which loads a hex file containing Z80 code or  6809 code
 I have found out how to upload new ROM contents without a full FPGA build using QuartusSTP.
 
 see: 
-http://ccgi.dougrice.plus.com/cgi-bin/wiki.pl?My_Notes_On_6809
+https://www.dougrice.co.uk/cgi-bin/wiki.pl?My_Notes_On_6809
 
 It has been ported to other FPGA boards.
 
@@ -73,7 +73,7 @@ It has been ported to other FPGA boards.
 
 * https://land-boards.com/blwiki/index.php?title=Main_Page
 
-My notes: http://www.dougrice.plus.com/dev/asm6809/
+My notes: https://www.dougrice.co.uk/dev/asm6809/
 
 ## BASIC 
 
@@ -261,7 +261,7 @@ The Multicomp uses the 68B05 uart.
 
 
 
-![ z80 uses uart to communiate with virtual-multicomp host](http://www.dougrice.plus.com/dev/asm6809/img/img30thumb.png)
+![ z80 uses uart to communiate with virtual-multicomp host](https://www.dougrice.co.uk/dev/asm6809/img/img30thumb.png)
 
 ## Build on Linux and Windows using Tiny C
 
@@ -308,7 +308,7 @@ A bug that delays outputting the last pressed key, until the next key is pressed
 
 
 
-![RC2014 backplane ](http://www.dougrice.plus.com/dev/asm6809/img/imgs_11_rc2014_z80.jpg)
+![RC2014 backplane ](https://www.dougrice.co.uk/dev/asm6809/img/imgs_11_rc2014_z80.jpg)
 ## RC2014 also uses SBC and BASIC 
 
 I brought one of Spencer Owen's RC2014 Z80 kits. 
@@ -405,15 +405,17 @@ Download the ROMS from the suggested sites.
 
 I used the assembler in as.zip as used by Grant Searle to build his BASIC for 6809.
 
+
+
 ## 6502 virtual Multicomp
 
 I never owned a 6502 so this is to be done. The FPGA version has a 6502
 
-See http://www.dougrice.plus.com/dev/6502/ for a port from an Arduino forum post
+See https://www.dougrice.co.uk/www/dev/6502/ for a port from an Arduino forum post
 
 Run 6502 code in a C program.
 
-http://www.dougrice.plus.com/dev/6502/cpu6502.c
+https://www.dougrice.co.uk/dev/6502/cpu6502.c
 
 Emulator for 6502 CPU running BASIC
 
@@ -621,4 +623,4 @@ It also allows an appreciation of running clocked logic in parallel.
 
 
 
-![waves ](http://www.dougrice.plus.com/images/imgWiki_AT049.jpg)
+![waves ](https://www.dougrice.co.uk/www/images/imgWiki_AT049.jpg)
