@@ -29,6 +29,7 @@ Doug Rice
 07/11/2022,
 22/12/2024
 24/02/2024
+17/09/2026
 
 It has been tested on LINUX Raspberry Pi Strech PC version and Windows with TinyC from https://bellard.org/tcc/
 
@@ -489,6 +490,36 @@ It was found on the elfcosmac web site. see: https://www.elf-emulation.com/rcasm
 
 The site had gone so I added the source code to my git hub The Z80.def file had a bug for  jp label.
 see: https://www.elf-emulation.com/rcasm.html	
+
+## Nascom2 and V&T assembler
+
+On 2026-09-17  I uploaded ihex_new.c to load vtasm.nas saved at 3000 so I could use SCM to disassemble it.
+some .nas files have a checksum at the end of the line, fscanf() treats \n as whitespace.
+
+Another Z80 simulator that runs the NASCOM2 in a web browser can be used to try out the NASCOM2 form the 1980's
+
+https://www.dougrice.co.uk/dev/nascom2/JavaScriptNascom2/jsnascom.html allows you to try out the Z80 bases NASCOM 2
+
+https://www.dougrice.co.uk/cgi-bin/wiki.pl?NASCOM2 - more notes
+
+It uses V&T assembler. 
+
+vtasm.nas has the format addr dd dd dd dd  dd dd dd dd checksum bs bs
+
+ 1000 3E 40 32 FA 0B DD 21 22 E5
+ 1008 0F CD 71 20 13 C3 64 15 D4
+ 1010 29 00 00 23 05 5F 23 85 78
+ 1018 01 1C 05 00 1C 04 00 0E 78
+
+files saved using the NASCOM 2 command "T nnnn nnnn 0 0 1" does not have the checksum.
+
+  3000 3E 40 32 FA 0B DD 21 22   
+  3008 0F CD 71 40 13 C3 64 35   
+  3010 29 00 00 23 05 5F 23 85   
+  3018 01 1C 05 00 1C 04 00 0E   
+ihex_new.c has updated ihex.c to read both formats and ihex formated files.
+
+It uses fscanf() and ftell(). \n is treated as whitespace.
 
 ## Windows Defender was reporting it as a Trojan Win32/Wacatac.B!ml
 
